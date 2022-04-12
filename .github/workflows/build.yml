@@ -30,5 +30,10 @@ jobs:
       - name: Push image to GitHub Container Registry
         run: |
           TAG=$(cat src/settings/base.py | grep VERSION | cut -d'=' -f 2 | cut -d'"' -f 2)
+          docker tag ghcr.io/arturgoms/django_base django_base:$TAG
           docker push ghcr.io/arturgoms/django_base:$TAG
+      - name: Updating latest
+        run: |
+          TAG=$(cat src/settings/base.py | grep VERSION | cut -d'=' -f 2 | cut -d'"' -f 2)
+          docker build  --tag ghcr.io/arturgoms/django_base:latest -f containers/Dockerfile .
           docker push ghcr.io/arturgoms/django_base:latest
