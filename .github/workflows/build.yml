@@ -6,6 +6,9 @@ on:
   push:
     branches: [master]
 
+env:
+  IMAGE_NAME: django-base
+
 jobs:
   lint_django_job:
     uses: arturgoms/django-base/.github/workflows/lint.yml@master
@@ -25,10 +28,17 @@ jobs:
           password: ${{ secrets.CR_PAT }}
       - name: Build the django-base Docker image
         run: |
-          TAG=$(cat src/settings/base.py | grep VERSION | cut -d'=' -f 2 | cut -d'"' -f 2)
-          docker build  --tag ghcr.io/arturgoms/django-base:$TAG -f containers/Dockerfile .
+          docker build -t $IMAGE_NAME -f dockerfiles/Dockerfile .
       - name: Push image to GitHub Container Registry
         run: |
           TAG=$(cat src/settings/base.py | grep VERSION | cut -d'=' -f 2 | cut -d'"' -f 2)
-          docker tag ghcr.io/arturgoms/django-base django-base:$TAG
-          docker push ghcr.io/arturgoms/django-base:$TAG
+          IMAGE_ID=ghcr.io/${{ github.repository_owner }}/$IMAGE_NAME
+
+          # Change all uppercase to lowercase
+          IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
+
+          docker tag $IMAGE_NAME $IMAGE_ID:$TAG
+          docker push $IMAGE_ID:$TAG
+          
+          docker tag $IMAGE_NAME $IMAGE_ID:latest
+          docker push $IMAGE_ID:latest
