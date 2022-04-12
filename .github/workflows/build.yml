@@ -25,11 +25,8 @@ jobs:
           password: ${{ secrets.CR_PAT }}
       - name: Build the django_base Docker image
         run: |
-          ls -la
           TAG=$(cat src/settings/base.py | grep VERSION | cut -d'=' -f 2 | cut -d'"' -f 2)
-          echo $TAG
-          ls -la src/
-          docker build src/containers/ --tag ghcr.io/arturgoms/django_base:$TAG
+          docker build containers/ --tag ghcr.io/arturgoms/django_base:$TAG
       - name: Push image to GitHub Container Registry
         run: |
           TAG=$(cat src/settings/base.py | grep VERSION | cut -d'=' -f 2 | cut -d'"' -f 2)
