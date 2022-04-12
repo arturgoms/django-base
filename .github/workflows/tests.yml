@@ -21,11 +21,16 @@ jobs:
     strategy:
       max-parallel: 4
       matrix:
-        python-version: [3.8.10, 3.9]
-        poetry-version: [1.0, 1.1.11]
+        python-version: [3.9]
+        poetry-version: [1.0]
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v3
+        with:
+          python-version: ${{ matrix.python-version }}
+          architecture: x64
       - name: Install poetry
         uses: snok/install-poetry@v1.0.0
         with:
