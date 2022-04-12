@@ -46,7 +46,7 @@ jobs:
         run: poetry install
         if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
       - name: Activate Env
-        run: source $(poetry env info --path)/bin/activate
+        run: poetry shell
       - name: Run Migrations
         run: python src/manage.py migrate --settings=settings.test --noinput
       - name: Run Tests
