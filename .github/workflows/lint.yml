@@ -35,7 +35,5 @@ jobs:
       - name: Install dependencies
         run: poetry install
         if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
-      - name: Activate Env
-        run: source $HOME/.poetry/env
       - name: Run PYLint
-        run: pylint -E --django-settings-module=settings.test src/
+        run: poetry run  pylint -E --django-settings-module=settings.test src/
