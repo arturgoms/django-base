@@ -20,7 +20,7 @@ htmlcov/
 # IDE:
 obj/
 bin/
-.idea/
+.idea/*
 .vscode/
 .vs/
 .DS_Store/
