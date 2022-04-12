@@ -26,7 +26,7 @@ jobs:
       - name: Build the django_base Docker image
         run: |
           TAG=$(cat src/settings/base.py | grep VERSION | cut -d'=' -f 2 | cut -d'"' -f 2)
-          docker build containers/ --tag ghcr.io/arturgoms/django_base:$TAG
+          docker build  --tag ghcr.io/arturgoms/django_base:$TAG -f containers/Dockerfile .
       - name: Push image to GitHub Container Registry
         run: |
           TAG=$(cat src/settings/base.py | grep VERSION | cut -d'=' -f 2 | cut -d'"' -f 2)
