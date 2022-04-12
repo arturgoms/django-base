@@ -35,4 +35,5 @@ jobs:
       - name: Updating latest
         run: |
           docker build  --tag ghcr.io/arturgoms/django_base:latest -f containers/Dockerfile .
+          docker tag ghcr.io/arturgoms/django_base django_base:latest
           docker push ghcr.io/arturgoms/django_base:latest
