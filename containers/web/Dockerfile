@@ -19,8 +19,8 @@ ENV ENV=${production} \
 # System deps:
 RUN pip install "poetry==$POETRY_VERSION"
 
-ADD ./containers/entrypoint.sh /
-ADD ./containers/gunicorn.py /
+ADD ./containers/web/entrypoint.sh /
+ADD ./containers/web/gunicorn.py /
 COPY poetry.lock pyproject.toml /app/
 
 # Install requirements

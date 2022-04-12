@@ -28,7 +28,7 @@ jobs:
           password: ${{ secrets.CR_PAT }}
       - name: Build the django-base Docker image
         run: |
-          docker build -t $IMAGE_NAME -f containers/Dockerfile .
+          docker build -t $IMAGE_NAME -f containers/web/Dockerfile .
       - name: Push image to GitHub Container Registry
         run: |
           TAG=$(cat src/settings/base.py | grep VERSION | cut -d'=' -f 2 | cut -d'"' -f 2)
