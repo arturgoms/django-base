@@ -10,9 +10,9 @@ on:
 
 jobs:
   lint_django_job:
-    uses: arturgoms/django-base/.github/workflows/lint.yaml@master
+    uses: arturgoms/django-base/.github/workflows/lint.yml@master
   test_django_job:
-    uses: arturgoms/django-base/.github/workflows/tests.yaml@master
+    uses: arturgoms/django-base/.github/workflows/tests.yml@master
   build:
     if: github.event.base_ref == 'refs/heads/master'
     name: Build
