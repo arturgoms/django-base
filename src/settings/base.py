@@ -21,7 +21,7 @@ from django.utils.translation import gettext_lazy as _
 # to control the entire project version.
 from rest_framework.reverse import reverse_lazy
 
-VERSION = "1.0.2"
+VERSION = "1.0.3"
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent

@@ -35,4 +35,4 @@ RUN poetry config virtualenvs.create false \
 RUN chmod +x /entrypoint.sh
 
 ENTRYPOINT ["/entrypoint.sh"]
-EXPOSE 8000
+EXPOSE 80

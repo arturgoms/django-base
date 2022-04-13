@@ -12,7 +12,7 @@ chdir = "/app/"
 
 # Bind the application on localhost both on ipv6 and ipv4 interfaces.
 # https://docs.gunicorn.org/en/stable/settings.html#bind
-bind = "0.0.0.0:8000"
+bind = "0.0.0.0:80"
 
 
 ####################

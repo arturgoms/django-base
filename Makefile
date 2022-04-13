@@ -19,3 +19,6 @@ shell:
 
 install-dependencies:
 	poetry install
+
+k8s-create-secret:
+	kubectl create secret generic polls-secret --from-env-file=.env
