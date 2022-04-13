@@ -22,3 +22,6 @@ install-dependencies:
 
 k8s-create-secret:
 	kubectl create secret generic polls-secret --from-env-file=.env
+
+helm-deploy:
+	helm upgrade --install django-app ./helm/django-app
