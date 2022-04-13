@@ -12,6 +12,7 @@ class RunSQLFile(Operation):
     Also accept a list of operations that represent the state change effected
     by this SQL change, in case it's custom column/table creation/deletion.
     """
+
     def __init__(self, path, reverse_path=None, hints=None, elidable=False):
         self.path = path
         self.reverse_path = reverse_path
@@ -20,17 +21,13 @@ class RunSQLFile(Operation):
 
     def deconstruct(self):
         kwargs = {
-            'path': self.path,
+            "path": self.path,
         }
         if self.reverse_path is not None:
-            kwargs['reverse_path'] = self.reverse_path
+            kwargs["reverse_path"] = self.reverse_path
         if self.hints:
-            kwargs['hints'] = self.hints
-        return (
-            self.__class__.__qualname__,
-            [],
-            kwargs
-        )
+            kwargs["hints"] = self.hints
+        return (self.__class__.__qualname__, [], kwargs)
 
     @property
     def reversible(self):
@@ -42,13 +39,17 @@ class RunSQLFile(Operation):
         pass
 
     def database_forwards(self, app_label, schema_editor, from_state, to_state):
-        if router.allow_migrate(schema_editor.connection.alias, app_label, **self.hints):
+        if router.allow_migrate(
+            schema_editor.connection.alias, app_label, **self.hints
+        ):
             self._run_sql(schema_editor, app_label, self.path)
 
     def database_backwards(self, app_label, schema_editor, from_state, to_state):
         if self.reverse_path is None:
             raise NotImplementedError("You cannot reverse this operation")
-        if router.allow_migrate(schema_editor.connection.alias, app_label, **self.hints):
+        if router.allow_migrate(
+            schema_editor.connection.alias, app_label, **self.hints
+        ):
             self._run_sql(schema_editor, app_label, self.reverse_path)
 
     def describe(self):
@@ -61,7 +62,7 @@ class RunSQLFile(Operation):
         if not os.path.exists(abs_path):
             raise RuntimeError(f'File "{abs_path}" not found.')
 
-        with open(abs_path, 'r') as f:
+        with open(abs_path, "r") as f:
             statements = schema_editor.connection.ops.prepare_sql_script(f.read())
             for statement in statements:
                 schema_editor.execute(statement, params=None)

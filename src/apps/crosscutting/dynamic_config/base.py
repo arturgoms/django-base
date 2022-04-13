@@ -7,12 +7,13 @@ from commons.utils import parser
 
 
 class BaseDynamicConfigBackend:
-
     def __init__(self, config=None):
-        self._config = config or dict(map(
-            lambda x: (x['key'], x),
-            (config or getattr(settings, 'DYNAMIC_CONFIG', None)) or []
-        ))
+        self._config = config or dict(
+            map(
+                lambda x: (x["key"], x),
+                (config or getattr(settings, "DYNAMIC_CONFIG", None)) or [],
+            )
+        )
 
     def to_python(self, value, cast=None):
         """
@@ -31,7 +32,7 @@ class BaseDynamicConfigBackend:
 
         if not callable(cast):
             # do not accept not callable casters.
-            raise ImproperlyConfigured('cast must be a callable.')
+            raise ImproperlyConfigured("cast must be a callable.")
 
         try:
             value = parser.parse(value, cast)
@@ -49,7 +50,9 @@ class BaseDynamicConfigBackend:
         Returns:
             dict<str: any>
         """
-        raise NotImplementedError('subclasses of BaseDynamicConfigClient must provide a get_all() method')
+        raise NotImplementedError(
+            "subclasses of BaseDynamicConfigClient must provide a get_all() method"
+        )
 
     def get(self, item):
         """
@@ -64,7 +67,9 @@ class BaseDynamicConfigBackend:
         Returns:
             any
         """
-        raise NotImplementedError('subclasses of BaseDynamicConfigClient must provide a get() method')
+        raise NotImplementedError(
+            "subclasses of BaseDynamicConfigClient must provide a get() method"
+        )
 
     def set(self, item, value):
         """
@@ -74,7 +79,9 @@ class BaseDynamicConfigBackend:
             item (str, required): Item key to store the value.
             value (any, required): Value to be stored.
         """
-        raise NotImplementedError('subclasses of BaseDynamicConfigClient must provide a set() method')
+        raise NotImplementedError(
+            "subclasses of BaseDynamicConfigClient must provide a set() method"
+        )
 
     def __getitem__(self, item):
         """

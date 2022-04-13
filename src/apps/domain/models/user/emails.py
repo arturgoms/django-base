@@ -12,21 +12,22 @@ def send_user_invite_email(user, password):
         user (domain.User, required): Invited user.
         password (str, required): Invited user's password.
     """
-    subject = _('Panel Access')
+    subject = _("Panel Access")
 
     send_mail(
         subject=subject,
-        template='email/user/invite.html',
+        template="email/user/invite.html",
         to=user.email,
         context={
-            'subject': subject,
-            'user': user,
-            'password': password,
-            'primary_button': {
-                'text': _('Access My Account'),
-                'url': reverse('admin:index')
-            }
-        })
+            "subject": subject,
+            "user": user,
+            "password": password,
+            "primary_button": {
+                "text": _("Access My Account"),
+                "url": reverse("admin:index"),
+            },
+        },
+    )
 
 
 def send_new_password_email(user, password):
@@ -37,18 +38,19 @@ def send_new_password_email(user, password):
         user (domain.User, required): Invited user.
         password (str, required): Invited user's password.
     """
-    subject = _('Panel Access')
+    subject = _("Panel Access")
 
     send_mail(
         subject=subject,
-        template='email/user/new_password.html',
+        template="email/user/new_password.html",
         to=user.email,
         context={
-            'subject': subject,
-            'user': user,
-            'password': password,
-            'primary_button': {
-                'text': _('Access My Account'),
-                'url': reverse('admin:index')
-            }
-        })
+            "subject": subject,
+            "user": user,
+            "password": password,
+            "primary_button": {
+                "text": _("Access My Account"),
+                "url": reverse("admin:index"),
+            },
+        },
+    )

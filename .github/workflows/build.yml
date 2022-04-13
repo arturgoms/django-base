@@ -14,10 +14,12 @@ jobs:
     uses: arturgoms/django-base/.github/workflows/lint.yml@master
   test_django_job:
     uses: arturgoms/django-base/.github/workflows/tests.yml@master
+  format_django_job:
+    uses: arturgoms/django-base/.github/workflows/format.yml@master
   build:
     name: Build
     runs-on: ubuntu-latest
-    needs: [ test_django_job, lint_django_job ]
+    needs: [ test_django_job, lint_django_job, format_django_job ]
     steps:
       - uses: actions/checkout@v2
       - name: Login to GitHub Container Registry

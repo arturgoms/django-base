@@ -12,10 +12,10 @@ def chunks(seq, n):
     Returns:
         generator
     """
-    assert isinstance(seq, Sequence), 'Parameter \'seq\' must be a valid Sequence.'
+    assert isinstance(seq, Sequence), "Parameter 'seq' must be a valid Sequence."
 
     for i in range(0, len(seq), n):
-        yield seq[i: i + n]
+        yield seq[i : i + n]
 
 
 def first_or_default(seq, func=lambda x: True, default=None):
@@ -30,7 +30,7 @@ def first_or_default(seq, func=lambda x: True, default=None):
     Return:
         Any
     """
-    assert isinstance(seq, Sequence), 'Parameter \'seq\' must be a valid Sequence.'
+    assert isinstance(seq, Sequence), "Parameter 'seq' must be a valid Sequence."
 
     try:
         value = next(filter(func, seq))
@@ -54,6 +54,6 @@ def coalesce(seq, default=None):
     Return:
         Any
     """
-    assert isinstance(seq, Sequence), 'Parameter \'seq\' must be a valid Sequence.'
+    assert isinstance(seq, Sequence), "Parameter 'seq' must be a valid Sequence."
 
     return first_or_default(seq, func=None, default=default)

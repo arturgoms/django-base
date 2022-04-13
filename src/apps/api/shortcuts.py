@@ -17,6 +17,8 @@ def generate_user_token(instance, exp=None):
     #     role = UserRoleEnum.SUPPLIER.value
 
     else:
-        raise TypeError('Instance must be \'domain.models.Client\' or \'domain.models.Supplier\' type.')
+        raise TypeError(
+            "Instance must be 'domain.models.Client' or 'domain.models.Supplier' type."
+        )
 
     return jwt.Jwt.generate(key=jwt.JWT_KEY, exp=exp, id=str(instance.pk), role=role)

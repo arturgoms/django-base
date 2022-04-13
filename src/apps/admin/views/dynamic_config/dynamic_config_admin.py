@@ -10,12 +10,14 @@ from commons.forms.fieldsets import Fieldsets
 
 
 class DynamicConfigAdminView(FormView):
-    template_name = 'admin/dynamic_config/change_form.html'
+    template_name = "admin/dynamic_config/change_form.html"
     fieldsets = None
 
     def get_form_class(self):
-        parameters = getattr(settings, 'DYNAMIC_CONFIG', None) or []
-        parameters = map(lambda x: dict(x, value=dynamic_config.get(x['key'])), parameters)
+        parameters = getattr(settings, "DYNAMIC_CONFIG", None) or []
+        parameters = map(
+            lambda x: dict(x, value=dynamic_config.get(x["key"])), parameters
+        )
         form_class, self.fieldsets = build_dynamic_config_form_class(parameters)
         return form_class
 
@@ -25,18 +27,20 @@ class DynamicConfigAdminView(FormView):
         return {
             **context,
             **admin.site.each_context(self.request),
-            'fieldsets': Fieldsets(context['form'], self.fieldsets),
-            'title': _('Settings')
+            "fieldsets": Fieldsets(context["form"], self.fieldsets),
+            "title": _("Settings"),
         }
 
     def form_valid(self, form):
         for key, value in form.cleaned_data.items():
             dynamic_config.set(key, value)
 
-        messages.success(self.request, str.format(
-            gettext('The {name} was updated successfully!'),
-            name=_('Settings')
-        ))
+        messages.success(
+            self.request,
+            str.format(
+                gettext("The {name} was updated successfully!"), name=_("Settings")
+            ),
+        )
 
-        next_url = self.request.GET.get('next') or self.request.get_full_path()
+        next_url = self.request.GET.get("next") or self.request.get_full_path()
         return HttpResponseRedirect(next_url)

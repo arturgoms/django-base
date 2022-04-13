@@ -5,7 +5,7 @@ from django.db import connections, DEFAULT_DB_ALIAS
 
 
 class DatabaseResult:
-    __slots__ = ('columns', 'result')
+    __slots__ = ("columns", "result")
 
     def __init__(self, columns, result):
         self.columns = columns
@@ -31,7 +31,6 @@ class DatabaseResult:
 
 
 class Database:
-
     def __init__(self, using=None):
         self.using: str = using or DEFAULT_DB_ALIAS
 
@@ -79,7 +78,9 @@ class Database:
 
             return DatabaseResult(columns=columns, result=result)
 
-    def select_one(self, query: str, params: Optional[dict] = None) -> Union[Any, Tuple]:
+    def select_one(
+        self, query: str, params: Optional[dict] = None
+    ) -> Union[Any, Tuple]:
         """
         Execute SQL query on database that returns a single value.
 

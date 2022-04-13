@@ -60,47 +60,46 @@ class APITestCase(BaseAPITestCase):
 
         except jsonschema.ValidationError:
             self.fail(
-                '\nThe Value: \n{data} \n\nIs not valid for schema: \n{schema}'.format(
+                "\nThe Value: \n{data} \n\nIs not valid for schema: \n{schema}".format(
                     data=json.dumps(data, indent=2),
                     schema=json.dumps(schema, indent=2),
-                ))
+                )
+            )
 
     # pylint: disable=invalid-name
     def assertPaginatedSchema(self, schema, data):
         """
         Check that data is valid for schema.
         """
-        self.assertSchema({
-            'type': 'object',
-            'properties': {
-                'count': {'type': 'integer'},
-                'next': {'type': ['string', 'null'], 'format': 'uri'},
-                'previous': {'type': ['string', 'null'], 'format': 'uri'},
-                'results': {
-                    'type': 'array',
-                    'items': dict(schema)
-                }
+        self.assertSchema(
+            {
+                "type": "object",
+                "properties": {
+                    "count": {"type": "integer"},
+                    "next": {"type": ["string", "null"], "format": "uri"},
+                    "previous": {"type": ["string", "null"], "format": "uri"},
+                    "results": {"type": "array", "items": dict(schema)},
+                },
+                "required": ["count", "next", "previous", "results"],
+                "additionalProperties": False,
             },
-            'required': ['count', 'next', 'previous', 'results'],
-            'additionalProperties': False
-        }, data)
+            data,
+        )
 
     # pylint: disable=invalid-name
     def assertListSchema(self, schema, data):
         """
         Check that data is valid for schema.
         """
-        self.assertSchema({
-            'type': 'object',
-            'properties': {
-                'results': {
-                    'type': 'array',
-                    'items': dict(schema)
-                }
+        self.assertSchema(
+            {
+                "type": "object",
+                "properties": {"results": {"type": "array", "items": dict(schema)}},
+                "required": ["results"],
+                "additionalProperties": False,
             },
-            'required': ['results'],
-            'additionalProperties': False
-        }, data)
+            data,
+        )
 
     # pylint: disable=invalid-name
     def assertAny(self, func, container):
@@ -108,7 +107,7 @@ class APITestCase(BaseAPITestCase):
         Check that at least one item match in container.
         """
         if not any(func(item) for item in container):
-            self.fail('No items have matched in %s' % safe_repr(container))
+            self.fail("No items have matched in %s" % safe_repr(container))
 
     # pylint: disable=invalid-name
     def assertNotAny(self, func, container):
@@ -116,7 +115,7 @@ class APITestCase(BaseAPITestCase):
         Check that no items match in container.
         """
         if any(func(item) for item in container):
-            self.fail('Any items have matched in %s' % safe_repr(container))
+            self.fail("Any items have matched in %s" % safe_repr(container))
 
     # pylint: disable=invalid-name
     def assertAll(self, func, container):
@@ -124,7 +123,9 @@ class APITestCase(BaseAPITestCase):
         Check that all items match in container.
         """
         if not all(func(item) for item in container):
-            self.fail('There where items that has not matched in %s' % safe_repr(container))
+            self.fail(
+                "There where items that has not matched in %s" % safe_repr(container)
+            )
 
     # pylint: disable=invalid-name
     def assertNotAll(self, func, container):
@@ -132,7 +133,7 @@ class APITestCase(BaseAPITestCase):
         Check that all items does not match in container.
         """
         if all(func(item) for item in container):
-            self.fail('All items has matched in %s' % safe_repr(container))
+            self.fail("All items has matched in %s" % safe_repr(container))
 
     # pylint: disable=invalid-name
     def assertExists(self, func, container):
@@ -142,7 +143,9 @@ class APITestCase(BaseAPITestCase):
         count = len(list(filter(func, container)))
 
         if count == 0:
-            self.fail('%s items found in container with given expression.' % safe_repr(count))
+            self.fail(
+                "%s items found in container with given expression." % safe_repr(count)
+            )
 
     # pylint: disable=invalid-name
     def assertNotExists(self, func, container):
@@ -152,7 +155,9 @@ class APITestCase(BaseAPITestCase):
         count = len(list(filter(func, container)))
 
         if count != 0:
-            self.fail('%s items found in container with given expression.' % safe_repr(count))
+            self.fail(
+                "%s items found in container with given expression." % safe_repr(count)
+            )
 
     # pylint: disable=invalid-name
     def assertIsEmpty(self, container):
@@ -160,7 +165,7 @@ class APITestCase(BaseAPITestCase):
         Check whether the container is empty.
         """
         if not len(container) == 0:
-            self.fail('%s != %s' % (len(container), 0))
+            self.fail("%s != %s" % (len(container), 0))
 
     # pylint: disable=invalid-name
     def assertIsNotEmpty(self, container):
@@ -168,4 +173,4 @@ class APITestCase(BaseAPITestCase):
         Check whether the container is not empty.
         """
         if not len(container) != 0:
-            self.fail('%s == %s' % (len(container), 0))
+            self.fail("%s == %s" % (len(container), 0))

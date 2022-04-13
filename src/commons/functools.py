@@ -5,15 +5,16 @@ class cached_property:
     """
     Decorator that converts a method with a single self argument into a
     property cached on the instance.
-    
+
     A cached property can be made out of an existing method:
     (e.g. ``url = cached_property(get_absolute_url)``).
     """
+
     name = None
 
     def __init__(self, func):
         self.func = func
-        self.__doc__ = getattr(func, '__doc__')
+        self.__doc__ = getattr(func, "__doc__")
 
     def __set_name__(self, owner, name):
         if self.name is None:
@@ -33,7 +34,7 @@ class cached_property:
         if instance is None:
             return self
 
-        _cached_prop = f'_cached_{self.name}'
+        _cached_prop = f"_cached_{self.name}"
 
         if not hasattr(instance, _cached_prop):
             setattr(instance, _cached_prop, self.func(instance))

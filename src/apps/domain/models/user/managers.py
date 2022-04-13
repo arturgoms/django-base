@@ -5,8 +5,9 @@ from apps.domain.models.user import emails
 
 
 class UserManager(BaseUserManager):
-
-    def make_random_password(self, length=10, allowed_chars='ABCDEFGHJKLMNPQRSTUVWXYZ23456789'):
+    def make_random_password(
+        self, length=10, allowed_chars="ABCDEFGHJKLMNPQRSTUVWXYZ23456789"
+    ):
         """
         Generate a random password with the given length and given
         allowed_chars. The default value of allowed_chars does not have "I" or
@@ -23,10 +24,7 @@ class UserManager(BaseUserManager):
         UserRole.objects.filter(user_id=instance.pk).delete()
 
         UserRole.objects.bulk_create(
-            [
-                UserRole(user_id=instance.pk, role=role)
-                for role in roles
-            ]
+            [UserRole(user_id=instance.pk, role=role) for role in roles]
         )
 
     def create_user(self, name, email, password=None, **kwargs):
@@ -39,7 +37,7 @@ class UserManager(BaseUserManager):
             password (str, optional): User's password.
             kwargs (dict, optional): Extra properties.
         """
-        roles = kwargs.pop('roles', None)
+        roles = kwargs.pop("roles", None)
 
         with transaction.atomic():
             instance = self.model(name=name, email=email, **kwargs)
@@ -67,7 +65,7 @@ class UserManager(BaseUserManager):
             kwargs (dict, optional): Extra properties.
         """
         # define superuser status.
-        kwargs['is_superuser'] = True
+        kwargs["is_superuser"] = True
 
         # create user.
         return self.create_user(name, email, password, **kwargs)
@@ -81,7 +79,7 @@ class UserManager(BaseUserManager):
             email (str, required): User email.
             roles (list<str>, optional): User roles.
         """
-        kwargs.setdefault('status', self.model.Status.ACTIVE)
+        kwargs.setdefault("status", self.model.Status.ACTIVE)
 
         # generate user password.
         password = self.make_random_password(length=8)
@@ -89,8 +87,8 @@ class UserManager(BaseUserManager):
         with transaction.atomic():
             # create user with password.
             instance = self.create_user(
-                name, email, password=password, roles=roles,
-                **kwargs)
+                name, email, password=password, roles=roles, **kwargs
+            )
 
         # send welcome email
         emails.send_user_invite_email(instance, password=password)

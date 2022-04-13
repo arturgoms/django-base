@@ -8,10 +8,9 @@ from apps.crosscutting.dynamic_config.base import BaseDynamicConfigBackend
 
 
 class DBDynamicConfigBackend(BaseDynamicConfigBackend):
-
     def __init__(self, model=None, config=None):
         super().__init__(config=config)
-        self._model = model or getattr(settings, 'DYNAMIC_CONFIG_MODEL', None)
+        self._model = model or getattr(settings, "DYNAMIC_CONFIG_MODEL", None)
         self._cached_values = {}
 
     @property
@@ -21,7 +20,7 @@ class DBDynamicConfigBackend(BaseDynamicConfigBackend):
 
         It can be the model itself or a dotted path.
         """
-        _cached_prop = '_cached_model'
+        _cached_prop = "_cached_model"
 
         if not hasattr(self, _cached_prop):
 
@@ -33,7 +32,9 @@ class DBDynamicConfigBackend(BaseDynamicConfigBackend):
                 model = django_apps.get_model(self._model)
 
             except (LookupError, AttributeError) as exc:
-                raise ImproperlyConfigured(f"Cannot load model \"{self._model}\".") from exc
+                raise ImproperlyConfigured(
+                    f'Cannot load model "{self._model}".'
+                ) from exc
 
             else:
                 setattr(self, _cached_prop, model)
@@ -53,7 +54,7 @@ class DBDynamicConfigBackend(BaseDynamicConfigBackend):
         Returns:
             dict<str: any>
         """
-        stored_config = dict(self.get_queryset().values_list('key', 'value'))
+        stored_config = dict(self.get_queryset().values_list("key", "value"))
 
         def get_value_from_key(key, cast=None, default=None):
             if key not in stored_config:
@@ -62,7 +63,12 @@ class DBDynamicConfigBackend(BaseDynamicConfigBackend):
             return self.to_python(stored_config[key], cast=cast)
 
         return OrderedDict(
-            (key, get_value_from_key(key, cast=config.get('cast'), default=config.get('default')))
+            (
+                key,
+                get_value_from_key(
+                    key, cast=config.get("cast"), default=config.get("default")
+                ),
+            )
             for key, config in sorted(self._config.items(), key=lambda x: x[0])
         )
 
@@ -82,21 +88,25 @@ class DBDynamicConfigBackend(BaseDynamicConfigBackend):
         if item not in self._cached_values:
             if item not in self._config:
                 # do not accept not configured key.
-                raise KeyError(f'Key "{item}" was not defined in settings.DYNAMIC_CONFIG.')
+                raise KeyError(
+                    f'Key "{item}" was not defined in settings.DYNAMIC_CONFIG.'
+                )
 
             config = self._config[item]
-            value = self.get_queryset() \
-                .filter(key=item) \
-                .values_list('value', flat=True) \
+            value = (
+                self.get_queryset()
+                .filter(key=item)
+                .values_list("value", flat=True)
                 .first()
+            )
 
-            value = self.to_python(value, cast=config.get('cast'))
+            value = self.to_python(value, cast=config.get("cast"))
 
             if value is not None:
-                self._cached_values['key'] = value
+                self._cached_values["key"] = value
                 return value
 
-            return config.get('default')
+            return config.get("default")
 
         return self._cached_values[item]
 
@@ -108,7 +118,7 @@ class DBDynamicConfigBackend(BaseDynamicConfigBackend):
             item (str, required): Item key to store the value.
             value (any, required): Value to be stored.
         """
-        self.model.objects.update_or_create(key=item, defaults={'value': value})
+        self.model.objects.update_or_create(key=item, defaults={"value": value})
 
         if item in self._cached_values:
             # flush cached value.

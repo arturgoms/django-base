@@ -12,7 +12,7 @@ class UserRoleEnum(Enum):
 
 
 class BaseRolePermission(BasePermission):
-    http_allowed_verbs = ['HEAD', 'OPTIONS']
+    http_allowed_verbs = ["HEAD", "OPTIONS"]
 
     def is_allowed_verb(self, request):
         """
@@ -20,7 +20,7 @@ class BaseRolePermission(BasePermission):
         """
         return request.method in self.http_allowed_verbs
 
-    def is_authenticated(self, request): # noqa
+    def is_authenticated(self, request):  # noqa
         """
         Check whether the user is authenticated.
         """

@@ -24,7 +24,7 @@ class Paginator(BasePaginator):
 class DefaultPagination(PageNumberPagination):
     # Client can control the page size using this query parameter.
     # Default is 'None'. Set to eg 'page_size' to enable usage.
-    page_size_query_param = 'page_size'
+    page_size_query_param = "page_size"
 
     # Set to an integer to limit the maximum page size the client may request.
     # Only relevant if 'page_size_query_param' has also been set.
@@ -48,8 +48,9 @@ class DefaultPagination(PageNumberPagination):
         Returns:
             int
         """
-        page_size = DataDict(request.query_params) \
-            .get(self.page_size_query_param, default=None, cast=int)
+        page_size = DataDict(request.query_params).get(
+            self.page_size_query_param, default=None, cast=int
+        )
 
         if page_size == DefaultPagination.ALL:
             # -1 returns all records.
@@ -59,7 +60,6 @@ class DefaultPagination(PageNumberPagination):
 
 
 class SkipPagination(BasePagination):
-
     def to_html(self):
         """
         Ignored to avoid django rest layout errors.
@@ -67,7 +67,7 @@ class SkipPagination(BasePagination):
         Returns:
             str
         """
-        return ''
+        return ""
 
     def paginate_queryset(self, queryset, request, view=None):
         """
@@ -93,6 +93,4 @@ class SkipPagination(BasePagination):
         Returns:
             rest_framework.response.Response
         """
-        return Response(OrderedDict([
-            ('results', data)
-        ]))
+        return Response(OrderedDict([("results", data)]))

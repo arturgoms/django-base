@@ -9,11 +9,9 @@ from django.urls import path, include
 
 from commons.admin.utils import admin_url_pattern
 
-urlpatterns = [
-    path('', include('urls.base'))
-]
+urlpatterns = [path("", include("urls.base"))]
 
 urlpatterns += i18n_patterns(
-    path(admin_url_pattern(), include('apps.admin.urls')),
-    path('', include('commons.admin.urls')),
+    path(admin_url_pattern(), include("apps.admin.urls")),
+    path("", include("commons.admin.urls")),
 )

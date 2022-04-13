@@ -12,10 +12,7 @@ def admin_url(view_name, opts, args=None, kwargs=None, params=None):
     """
     Reverse a url to admin site using the provided args.
     """
-    view_name = 'admin:%s_%s_%s' % (
-        opts.app_label,
-        opts.model_name,
-        view_name)
+    view_name = "admin:%s_%s_%s" % (opts.app_label, opts.model_name, view_name)
 
     # get url for the view.
     url = reverse(view_name, args=args, kwargs=kwargs)
@@ -36,7 +33,7 @@ def get_readonly_fields(fieldsets, exclude=None):
     fields = []
 
     for fieldset in fieldsets:
-        fields += [field for field in fieldset[1]['fields'] if field not in exclude]
+        fields += [field for field in fieldset[1]["fields"] if field not in exclude]
 
     return fields
 
@@ -46,17 +43,15 @@ def get_related_model_count_link(model, count, lookup_filter):
     Returns a link or a text of a related model count.
     """
     if not count > 0:
-        return '-'
+        return "-"
 
-    _opts = getattr(model, '_meta')
+    _opts = getattr(model, "_meta")
 
     display_text = pluralize(
-        f'{count} {_opts.verbose_name}',
-        f'{count} {_opts.verbose_name_plural}',
-        count
+        f"{count} {_opts.verbose_name}", f"{count} {_opts.verbose_name_plural}", count
     )
 
-    url = querystring(admin_url('changelist', _opts), includes=lookup_filter)
+    url = querystring(admin_url("changelist", _opts), includes=lookup_filter)
 
     return format_html('<a href="{}">{}</a>', url, display_text)
 
@@ -117,22 +112,21 @@ class Shortcut:
         Renders the icon to show on admin shortcut.
         """
         if not self._icon:
-            return ''
+            return ""
 
-        icon_type = self._icon.pop('type', 'icon')
+        icon_type = self._icon.pop("type", "icon")
 
-        if icon_type == 'img':
+        if icon_type == "img":
             # returns a rendered image icon.
             return format_html(
-                '<img src="{url}" class="shortcut-icon" />',
-                **self._icon)
+                '<img src="{url}" class="shortcut-icon" />', **self._icon
+            )
 
         # returns a rendered font-awesome icon.
         return format_html(
-            '<i class="shortcut-icon {prefix} fa-fw fa-{name}"></i>', **{
-                **self._icon,
-                'prefix': self._icon.get('prefix', 'fa')
-            })
+            '<i class="shortcut-icon {prefix} fa-fw fa-{name}"></i>',
+            **{**self._icon, "prefix": self._icon.get("prefix", "fa")},
+        )
 
     def render(self):
         """
@@ -142,16 +136,23 @@ class Shortcut:
 
         if icon:
             # shows the icon if necessary.
-            content = format_html('{icon} <span class="shortcut-title">{title}</span>', icon=icon, title=self.title)
+            content = format_html(
+                '{icon} <span class="shortcut-title">{title}</span>',
+                icon=icon,
+                title=self.title,
+            )
         else:
             # get the content without the title.
-            content = format_html('<span class="shortcut-title">{title}</span>', title=self.title)
+            content = format_html(
+                '<span class="shortcut-title">{title}</span>', title=self.title
+            )
 
         return format_html(
             '<a href="{url}" class="shortcut{active}">{content}</a>',
             content=content,
             url=self.url,
-            active='' if not self.is_active else ' active')
+            active="" if not self.is_active else " active",
+        )
 
 
 def admin_shortcuts(request):

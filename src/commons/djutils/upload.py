@@ -16,8 +16,10 @@ def _get_file(path_or_stream, filename=None):
         django.core.files.base.ContentFile
     """
     if isinstance(path_or_stream, str):
-        with open(path_or_stream, 'rb') as f:
-            return ContentFile(f.read(), name=filename or os.path.split(path_or_stream)[1])
+        with open(path_or_stream, "rb") as f:
+            return ContentFile(
+                f.read(), name=filename or os.path.split(path_or_stream)[1]
+            )
 
     return ContentFile(path_or_stream.read(), name=filename or path_or_stream.name)
 
@@ -38,5 +40,9 @@ def upload_file(path_or_stream, upload_path, filename=None, storage=None):
     """
     storage = storage or default_storage
     file = _get_file(path_or_stream, filename=filename)
-    name = upload_path(file.name) if callable(upload_path) else os.path.join(upload_path, file.name)
+    name = (
+        upload_path(file.name)
+        if callable(upload_path)
+        else os.path.join(upload_path, file.name)
+    )
     return storage.save(name=name, content=file)

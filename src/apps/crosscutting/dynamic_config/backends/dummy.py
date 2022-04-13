@@ -2,11 +2,11 @@ from apps.crosscutting.dynamic_config.base import BaseDynamicConfigBackend
 
 
 class DummyDynamicConfigBackend(BaseDynamicConfigBackend):
-
     def get_all(self):
         return {
             # always returns default value.
-            key: config.get('default') for key, config in self._config.items()
+            key: config.get("default")
+            for key, config in self._config.items()
         }
 
     def get(self, item):
@@ -15,7 +15,7 @@ class DummyDynamicConfigBackend(BaseDynamicConfigBackend):
             raise KeyError(f'Key "{item}" was not defined in settings.DYNAMIC_CONFIG.')
 
         # always returns default value.
-        return self._config[item].get('default')
+        return self._config[item].get("default")
 
     def set(self, item, value):
         # do nothing.

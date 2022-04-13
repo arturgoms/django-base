@@ -4,9 +4,8 @@ from apps.domain.models import User
 
 
 class PermissionHelper:
-
     def __init__(self):
-        self.permissions = getattr(settings, 'ADMIN_PERMISSIONS', {})
+        self.permissions = getattr(settings, "ADMIN_PERMISSIONS", {})
 
     def has_permission(self, user: User, context: str, action: str) -> bool:
         """
@@ -19,7 +18,9 @@ class PermissionHelper:
             return False
 
         for role in user.roles:
-            actions = ((self.permissions.get(role) or {}).get('permissions') or {}).get(context) or []
+            actions = ((self.permissions.get(role) or {}).get("permissions") or {}).get(
+                context
+            ) or []
 
             if action in actions:
                 return True

@@ -10,4 +10,7 @@ class HealthCheckViewSet(viewsets.ViewSet):
         """
         Returns whether the service is health.
         """
-        return HttpResponse('Healthy', content_type='text/plain', status=status.HTTP_200_OK)
+
+        return HttpResponse(
+            "Healthy", content_type="text/plain", status=status.HTTP_200_OK
+        )

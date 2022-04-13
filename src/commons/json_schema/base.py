@@ -25,7 +25,15 @@ def validate_schema(schema, data):
 class BaseProperty:
     type = None
 
-    def __init__(self, title=None, description=None, default=None, examples=None, nullable=False, required=True):
+    def __init__(
+        self,
+        title=None,
+        description=None,
+        default=None,
+        examples=None,
+        nullable=False,
+        required=True,
+    ):
         self.title = title
         self.description = description
         self.default = default
@@ -35,34 +43,38 @@ class BaseProperty:
 
     def to_dict(self):
         if self.nullable and isinstance(self.type, (list, tuple)):
-            type_ = list(self.type) + ['null']
+            type_ = list(self.type) + ["null"]
 
         elif self.nullable:
-            type_ = [self.type, 'null']
+            type_ = [self.type, "null"]
 
         else:
             type_ = self.type
 
-        return collections.OrderedDict(filter(lambda x: x[1] is not None, [
-            ('type', type_),
-            ('title', self.title),
-            ('description', self.description),
-            ('examples', self.examples),
-            ('default', self.default)
-        ]))
+        return collections.OrderedDict(
+            filter(
+                lambda x: x[1] is not None,
+                [
+                    ("type", type_),
+                    ("title", self.title),
+                    ("description", self.description),
+                    ("examples", self.examples),
+                    ("default", self.default),
+                ],
+            )
+        )
 
     def to_json(self):
         return json.dumps(self.to_dict())
 
     def __repr__(self):
-        return f'<{self.__class__.__name__}: {self.type}>'
+        return f"<{self.__class__.__name__}: {self.type}>"
 
     def __str__(self):
         return self.to_json()
 
 
 class JsonSchemaOptions:
-
     def __init__(self):
         self.additional_properties = True
         self.title = None
@@ -80,29 +92,38 @@ class JsonSchemaOptions:
 
 
 class JsonSchemaMeta(type):
-
     @classmethod
     def _get_declared_properties(mcs, bases, attrs):
-        properties = [(name, prop) for name, prop in attrs.items() if isinstance(prop, BaseProperty)]
+        properties = [
+            (name, prop)
+            for name, prop in attrs.items()
+            if isinstance(prop, BaseProperty)
+        ]
 
         # If this class is subclassing another Schema, add that Schema's
         # properties. Note that we loop over the bases in *reverse*. This is necessary
         # in order to maintain the correct order of fields.
         for base in reversed(bases):
-            opts = getattr(base, '_meta', None)
+            opts = getattr(base, "_meta", None)
 
             if not opts or not opts.properties:
                 continue
 
-            properties = [(name, prop) for name, prop in opts.properties.items() if name not in attrs] + properties
+            properties = [
+                (name, prop)
+                for name, prop in opts.properties.items()
+                if name not in attrs
+            ] + properties
 
         return collections.OrderedDict(properties)
 
     def __new__(mcs, name, bases, attrs, **kwargs):
-        attr_meta = (attrs.pop('Meta', None) or object).__dict__.items()
-        meta = JsonSchemaOptions.init(**{key: val for key, val in attr_meta if not key.startswith('_')})
+        attr_meta = (attrs.pop("Meta", None) or object).__dict__.items()
+        meta = JsonSchemaOptions.init(
+            **{key: val for key, val in attr_meta if not key.startswith("_")}
+        )
         meta.properties = mcs._get_declared_properties(bases, attrs)
-        attrs['_meta'] = meta
+        attrs["_meta"] = meta
         return super().__new__(mcs, name, bases, attrs, **kwargs)
 
     def __iter__(cls):
@@ -113,18 +134,22 @@ class JsonSchemaMeta(type):
 
 
 class JsonSchema(metaclass=JsonSchemaMeta):
-
     def to_dict(self):
-        opts = getattr(self, '_meta')
+        opts = getattr(self, "_meta")
         properties = opts.properties.items()
-        return collections.OrderedDict(filter(lambda x: x[1] is not None, [
-            ('type', 'object'),
-            ('title', opts.title),
-            ('description', opts.description),
-            ('properties', {name: prop.to_dict() for name, prop in properties}),
-            ('required', [name for name, prop in properties if prop.required]),
-            ('additionalProperties', opts.additional_properties)
-        ]))
+        return collections.OrderedDict(
+            filter(
+                lambda x: x[1] is not None,
+                [
+                    ("type", "object"),
+                    ("title", opts.title),
+                    ("description", opts.description),
+                    ("properties", {name: prop.to_dict() for name, prop in properties}),
+                    ("required", [name for name, prop in properties if prop.required]),
+                    ("additionalProperties", opts.additional_properties),
+                ],
+            )
+        )
 
     def to_json(self):
         return json.dumps(self.to_dict())
@@ -141,6 +166,6 @@ class JsonSchema(metaclass=JsonSchemaMeta):
             yield item
 
     def __repr__(self):
-        opts = getattr(self, '_meta')
+        opts = getattr(self, "_meta")
         properties = list(opts.properties.values())
-        return f'<({type(self).__name__}): {properties}>'
+        return f"<({type(self).__name__}): {properties}>"

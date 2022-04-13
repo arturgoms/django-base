@@ -13,8 +13,8 @@ def adjust_image(stream, format, size, quality=85):  # pylint: disable=W0622
 
     out_stream = io.BytesIO()
 
-    Image(stream) \
-        .resize(size, keep_aspect=True) \
-        .save(out_stream, format=format, quality=quality)
+    Image(stream).resize(size, keep_aspect=True).save(
+        out_stream, format=format, quality=quality
+    )
 
     return out_stream

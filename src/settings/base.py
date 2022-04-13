@@ -35,7 +35,9 @@ config = decouple.AutoConfig(BASE_DIR.parent)
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = config("DJANGO_SECRET_KEY", "9x#)gd&p@@+pb+*4_8maaof-^r&z(&j*w%g80zf3x9yw^uea-2")
+SECRET_KEY = config(
+    "DJANGO_SECRET_KEY", "9x#)gd&p@@+pb+*4_8maaof-^r&z(&j*w%g80zf3x9yw^uea-2"
+)
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config("DJANGO_DEBUG", True, cast=bool)
@@ -53,12 +55,10 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "django.contrib.postgres",
-
     # Third-part APPs
-    'corsheaders',
+    "corsheaders",
     "rest_framework",
     "ckeditor",
-
     # Project APPs
     "apps.domain",
     "apps.admin",
@@ -68,17 +68,14 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
-
     # CORS Support.
-    'corsheaders.middleware.CorsMiddleware',
-
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.locale.LocaleMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-
     # Custom Project Middleware
     "commons.middleware.TimezoneMiddleware",
 ]
@@ -111,7 +108,9 @@ WSGI_APPLICATION = "wsgi.application"
 
 DATABASES = {
     "default": config(
-        "DATABASE_URL", default="postgres://postgres:postgres@localhost:5432/base", cast=dj_database_url.parse
+        "DATABASE_URL",
+        default="postgres://postgres:postgres@localhost:5432/base",
+        cast=dj_database_url.parse,
     )
 }
 
@@ -119,7 +118,9 @@ DATABASES = {
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
-    {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
+    {
+        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"
+    },
     {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
     {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},
     {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
@@ -140,7 +141,7 @@ SUPERUSER_PASSWORD = config("DJANGO_SUPERUSER_PASSWORD", default="password123")
 # Auto Field
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
@@ -193,57 +194,61 @@ AUTHENTICATION_CLIENT = "commons.api.jwt_auth.JwtAuthenticationClient"
 # Use ``python -c 'from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())'``
 # to generate a new key.
 
-JWT_KEY = config("JWT_KEY", default="&@_rv-kvpcw-m9aqja3qky*$g0vuuj1_w(ob7!%!zrslrn^bb^")
+JWT_KEY = config(
+    "JWT_KEY", default="&@_rv-kvpcw-m9aqja3qky*$g0vuuj1_w(ob7!%!zrslrn^bb^"
+)
 JWT_EXP = config("JWT_EXP", default=3600, cast=int)
 
 # Public API Access
 # Define the settings to use ``commons.api.permission.IsPublic`` permission.
 
-PUBLIC_API_ACCESS_KEY = config("PUBLIC_API_ACCESS_KEY", default="1t*83=oh2y)!dzi&h%a7&5w%eq%$oldjh$zdj$gpfmgbqzz638")
+PUBLIC_API_ACCESS_KEY = config(
+    "PUBLIC_API_ACCESS_KEY",
+    default="1t*83=oh2y)!dzi&h%a7&5w%eq%$oldjh$zdj$gpfmgbqzz638",
+)
 
 # CORS Settings
 # https://github.com/adamchainz/django-cors-headers
 
-CORS_ALLOW_ALL_ORIGINS = config('CORS_ALLOW_ALL_ORIGINS', False, cast=bool)
-CORS_ALLOWED_ORIGINS = config('CORS_ALLOWED_ORIGINS', '', cast=decouple.Csv())
+CORS_ALLOW_ALL_ORIGINS = config("CORS_ALLOW_ALL_ORIGINS", False, cast=bool)
+CORS_ALLOWED_ORIGINS = config("CORS_ALLOWED_ORIGINS", "", cast=decouple.Csv())
 
-CORS_ALLOW_METHODS = config('CORS_ALLOW_METHODS', 'DELETE,GET,OPTIONS,PATCH,POST,PUT', cast=decouple.Csv())
+CORS_ALLOW_METHODS = config(
+    "CORS_ALLOW_METHODS", "DELETE,GET,OPTIONS,PATCH,POST,PUT", cast=decouple.Csv()
+)
 
 CORS_ALLOW_HEADERS = config(
-    'CORS_ALLOW_HEADERS',
-    'accept,accept-encoding,accept-timezone,authorization,content-type,dnt,origin,'
-    'user-agent,x-csrftoken,x-requested-with',
-    cast=decouple.Csv())
+    "CORS_ALLOW_HEADERS",
+    "accept,accept-encoding,accept-timezone,authorization,content-type,dnt,origin,"
+    "user-agent,x-csrftoken,x-requested-with",
+    cast=decouple.Csv(),
+)
 
 
 # Admin Customization
 # https://docs.djangoproject.com/en/3.2/ref/contrib/admin/#adminsite-attributes
 
-ADMIN_SITE_TITLE = "Base"          # Admin browser title
-ADMIN_SITE_HEADER = "Base"         # Admin header text
-ADMIN_SITE_INDEX_TITLE = _("Home")   # Admin index page title
+ADMIN_SITE_TITLE = "Base"  # Admin browser title
+ADMIN_SITE_HEADER = "Base"  # Admin header text
+ADMIN_SITE_INDEX_TITLE = _("Home")  # Admin index page title
 ADMIN_SITE_URL_PREFIX = "/admin/"  # Admin url prefix
-ADMIN_SITE_URL = None                # Remove site URL
+ADMIN_SITE_URL = None  # Remove site URL
 
 # Admin Shortcuts
 
-ADMIN_SHORTCUTS = [{
-    "title": _("Users"),
-    "url": reverse_lazy('admin:domain_user_changelist'),
-    "icon": {"name": "users"}
-}]
+ADMIN_SHORTCUTS = [
+    {
+        "title": _("Users"),
+        "url": reverse_lazy("admin:domain_user_changelist"),
+        "icon": {"name": "users"},
+    }
+]
 
 # Admin User Links
 
 ADMIN_USER_LINKS = [
-    {
-        "title": _("Settings"),
-        "url": reverse_lazy("dynamic-config")
-    },
-    {
-        "title": _("API Docs"),
-        "url": reverse_lazy("api-docs")
-    },
+    {"title": _("Settings"), "url": reverse_lazy("dynamic-config")},
+    {"title": _("API Docs"), "url": reverse_lazy("api-docs")},
 ]
 
 # Email Settings
@@ -261,12 +266,14 @@ EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 # Domain
 # Provide ability to generate correct absolute urls in missing request scope.
 
-DOMAIN = config('DOMAIN', 'http://localhost:8000/')
+DOMAIN = config("DOMAIN", "http://localhost:8000/")
 
 
 # Dynamic Config
 
-DYNAMIC_CONFIG_BACKEND = "apps.crosscutting.dynamic_config.backends.db.DBDynamicConfigBackend"
+DYNAMIC_CONFIG_BACKEND = (
+    "apps.crosscutting.dynamic_config.backends.db.DBDynamicConfigBackend"
+)
 DYNAMIC_CONFIG_MODEL = "domain.DynamicConfigParameter"
 
 DYNAMIC_CONFIG = [
@@ -278,9 +285,11 @@ DYNAMIC_CONFIG = [
         "required": True,
         "form_field": "django.forms.IntegerField",
         "form_field_widget": "django.contrib.admin.widgets.AdminIntegerFieldWidget",
-        "validators": [("django.core.validators.MinValueValidator", {"limit_value": 0})],
+        "validators": [
+            ("django.core.validators.MinValueValidator", {"limit_value": 0})
+        ],
         "cast": int,
-        "default": 1
+        "default": 1,
     }
 ]
 
@@ -294,7 +303,16 @@ CKEDITOR_CONFIGS = {
             {"name": "styles", "items": ["Format"]},
             {
                 "name": "basicstyles",
-                "items": ["Bold", "Italic", "Underline", "Strike", "Subscript", "Superscript", "-", "RemoveFormat"],
+                "items": [
+                    "Bold",
+                    "Italic",
+                    "Underline",
+                    "Strike",
+                    "Subscript",
+                    "Superscript",
+                    "-",
+                    "RemoveFormat",
+                ],
             },
             {
                 "name": "paragraph",
@@ -343,12 +361,14 @@ CHANNEL_LAYERS = {
     },
 }
 ADMIN_BASIC_PERMISSIONS = {
-            "UserAdmin": ["view"],
-        }
+    "UserAdmin": ["view"],
+}
 ADMIN_PERMISSIONS = {}
 
 
 # Notification
 
-NOTIFICATION_BACKEND = "apps.websocket.notification.backend.console.WSNotificationBackend"
+NOTIFICATION_BACKEND = (
+    "apps.websocket.notification.backend.console.WSNotificationBackend"
+)
 NOTIFICATIONS = {}

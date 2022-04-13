@@ -1,5 +1,3 @@
-
-
 class Undefined:
     """
     Sentinel object to control values cast.
@@ -22,22 +20,22 @@ def boolean(value):
     """
     value = str(value).lower()
 
-    if value in ('y', 'yes', 't', 'true', 'on', '1'):
+    if value in ("y", "yes", "t", "true", "on", "1"):
         value = True
 
-    elif value in ('n', 'no', 'f', 'false', 'off', '0'):
+    elif value in ("n", "no", "f", "false", "off", "0"):
         value = False
 
     else:
-        raise ValueError(f'invalid value for bool(): \'{value}\'')
+        raise ValueError(f"invalid value for bool(): '{value}'")
 
     return value
 
 
 class csv:  # noqa
-    __slots__ = ('delimiter',)
+    __slots__ = ("delimiter",)
 
-    def __init__(self, delimiter=','):
+    def __init__(self, delimiter=","):
         self.delimiter = delimiter
 
     def __call__(self, value):
@@ -47,7 +45,7 @@ class csv:  # noqa
         if not value:
             return []
 
-        return list(filter(None, (v.strip(' ') for v in value.split(self.delimiter))))
+        return list(filter(None, (v.strip(" ") for v in value.split(self.delimiter))))
 
 
 def parse(value, cast=undefined):

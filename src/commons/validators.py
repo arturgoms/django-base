@@ -5,18 +5,18 @@ from django.utils.translation import gettext_lazy as _
 
 
 class RuleValidator:
-    message = _('Invalid Value.')
-    code = 'invalid'
+    message = _("Invalid Value.")
+    code = "invalid"
 
     def __init__(self, rule, message=None):
-        assert callable(rule), 'Argument rule must be a callable.'
+        assert callable(rule), "Argument rule must be a callable."
 
         self.rule = rule
         self.message = message or self.message
 
     def __call__(self, value):
         cleaned = self.clean(value)
-        params = {'value': cleaned}
+        params = {"value": cleaned}
 
         if not self.rule(cleaned):
             raise ValidationError(self.message, code=self.code, params=params)
@@ -26,9 +26,10 @@ class RuleValidator:
             return NotImplemented
 
         return (
-            self.rule == other.rule and
-            self.message == other.message and
-            self.code == other.code)
+            self.rule == other.rule
+            and self.message == other.message
+            and self.code == other.code
+        )
 
     def clean(self, value):
         return value
@@ -37,10 +38,9 @@ class RuleValidator:
 @deconstructible
 class FileSizeValidator:
     message = _(
-        'File Size "%(current_size)s" is not allowed. '
-        'Allowed size %(max_size)s.'
+        'File Size "%(current_size)s" is not allowed. ' "Allowed size %(max_size)s."
     )
-    code = 'limit_value'
+    code = "limit_value"
 
     def __init__(self, max_size, message=None):
         self.max_size = max_size
@@ -51,8 +51,8 @@ class FileSizeValidator:
         current_size = value.size
 
         info = {
-            'current_size': f'{current_size} Bytes',
-            'max_size': f'{self.max_size} Bytes'
+            "current_size": f"{current_size} Bytes",
+            "max_size": f"{self.max_size} Bytes",
         }
 
         if current_size > self.max_size:
@@ -62,9 +62,9 @@ class FileSizeValidator:
         if not isinstance(other, self.__class__):
             return NotImplemented
         return (
-            self.max_size == other.max_size and
-            self.message == other.message and
-            self.code == other.code
+            self.max_size == other.max_size
+            and self.message == other.message
+            and self.code == other.code
         )
 
 
@@ -72,10 +72,10 @@ class FileSizeValidator:
 class ImageResolutionValidator:
     message = _(
         'Image resolution "%(current_resolution)s" is not allowed. '
-        'Allowed resolutions are: %(allowed_resolutions)s.'
+        "Allowed resolutions are: %(allowed_resolutions)s."
     )
 
-    code = 'invalid'
+    code = "invalid"
 
     def __init__(self, allowed_resolutions, message=None):
         self.allowed_resolutions = allowed_resolutions
@@ -91,15 +91,19 @@ class ImageResolutionValidator:
         width, height = get_image_dimensions(value)
 
         info = {
-            'current_resolution': f'{width}x{height}px',
-            'allowed_resolutions': ', '.join([f'{w}x{h}px' for w, h in self.allowed_resolutions])
+            "current_resolution": f"{width}x{height}px",
+            "allowed_resolutions": ", ".join(
+                [f"{w}x{h}px" for w, h in self.allowed_resolutions]
+            ),
         }
 
         if not width or not height:
             # if is not image return ignore.
             raise ValidationError(self.message, code=self.code, params=info)
 
-        if not list(filter(lambda x: width == x[0] and height == x[1], self.allowed_resolutions)):
+        if not list(
+            filter(lambda x: width == x[0] and height == x[1], self.allowed_resolutions)
+        ):
             raise ValidationError(self.message, code=self.code, params=info)
 
     def __eq__(self, other):
@@ -107,7 +111,7 @@ class ImageResolutionValidator:
             return NotImplemented
 
         return (
-            self.allowed_resolutions == other.allowed_resolutions and
-            self.message == other.message and
-            self.code == other.code
+            self.allowed_resolutions == other.allowed_resolutions
+            and self.message == other.message
+            and self.code == other.code
         )

@@ -7,16 +7,24 @@ from commons.utils import parser
 from commons.utils.collections import DataDict
 
 
-def get_multi_value_lookup(request, url_kwarg, lookup_field=None,
-                           many=False, delimiter=',', operator=op.or_,
-                           cast=parser.undefined):
+def get_multi_value_lookup(
+    request,
+    url_kwarg,
+    lookup_field=None,
+    many=False,
+    delimiter=",",
+    operator=op.or_,
+    cast=parser.undefined,
+):
     """
     Generate the lookups for a field with a given request.
 
     Returns None if no field is provided.
     """
     lookup_field = lookup_field or url_kwarg
-    values = DataDict(request.GET).get(url_kwarg, default=[], cast=parser.csv(delimiter=delimiter))
+    values = DataDict(request.GET).get(
+        url_kwarg, default=[], cast=parser.csv(delimiter=delimiter)
+    )
 
     _filters = []
 
@@ -36,14 +44,23 @@ def get_multi_value_lookup(request, url_kwarg, lookup_field=None,
     if not _filters:
         return None
 
-    return functools.reduce(operator, map(lambda x: Q(**{lookup_field: x}), _filters), Q())
+    return functools.reduce(
+        operator, map(lambda x: Q(**{lookup_field: x}), _filters), Q()
+    )
 
 
 class Filter(filters.BaseFilter):
-
-    def __init__(self, url_kwarg, lookup=None, many=False, delimiter=',',
-                 operator=op.or_, default=filters.unset, distinct=False,
-                 cast=parser.undefined):
+    def __init__(
+        self,
+        url_kwarg,
+        lookup=None,
+        many=False,
+        delimiter=",",
+        operator=op.or_,
+        default=filters.unset,
+        distinct=False,
+        cast=parser.undefined,
+    ):
         super().__init__(url_kwarg)
 
         self.lookup = lookup or url_kwarg
@@ -55,15 +72,18 @@ class Filter(filters.BaseFilter):
         self.distinct = distinct
 
     def filter(self, request, queryset):
-        lookup = get_multi_value_lookup(
-            request=request,
-            url_kwarg=self.url_kwarg,
-            lookup_field=self.lookup,
-            many=self.many,
-            delimiter=self.delimiter,
-            operator=self.operator,
-            cast=self.cast
-        ) or self.default
+        lookup = (
+            get_multi_value_lookup(
+                request=request,
+                url_kwarg=self.url_kwarg,
+                lookup_field=self.lookup,
+                many=self.many,
+                delimiter=self.delimiter,
+                operator=self.operator,
+                cast=self.cast,
+            )
+            or self.default
+        )
 
         if lookup is filters.unset:
             return queryset

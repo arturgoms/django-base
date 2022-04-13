@@ -12,13 +12,16 @@ def partial_call(func, **kwargs):
     """
     Call the function only with its required arguments.
     """
-    return func(**{
-        key: value for key, value in kwargs.items() if key in inspect.getfullargspec(func).args
-    })
+    return func(
+        **{
+            key: value
+            for key, value in kwargs.items()
+            if key in inspect.getfullargspec(func).args
+        }
+    )
 
 
 class AdminActionMixin:
-
     def get_extra_actions(self):
         """
         Walk through the class methods to identify
@@ -27,11 +30,11 @@ class AdminActionMixin:
         """
         actions = []
 
-        for name in filter(lambda x: x.endswith('_action'), dir(self)):
+        for name in filter(lambda x: x.endswith("_action"), dir(self)):
             # get only actions names with the suffix `_action`.
             func = getattr(self, name)
 
-            if not getattr(func, 'is_extra_action', False):
+            if not getattr(func, "is_extra_action", False):
                 # ignores if the function was not wrapped
                 # by @admin_action decorator.
                 continue
@@ -75,6 +78,7 @@ class AdminToolsMixin:
     >>>     }]
     >>> }
     """
+
     object_tools = None
 
     def has_tool_permission(self, permission, request, obj=None):
@@ -95,16 +99,20 @@ class AdminToolsMixin:
         Returns the title based on model meta information.
         """
         return title % {
-            'verbose_name': self.opts.verbose_name,
-            'verbose_name_plural': self.opts.verbose_name_plural,
-            'app_label': self.opts.app_label
+            "verbose_name": self.opts.verbose_name,
+            "verbose_name_plural": self.opts.verbose_name_plural,
+            "app_label": self.opts.app_label,
         }
 
     def render_group(self, request, title, items, attrs=None, obj=None):
         """
         Render the whole group of tools.
         """
-        items = partial_call(items, request=request, obj=obj, opts=self.opts) if callable(items) else None
+        items = (
+            partial_call(items, request=request, obj=obj, opts=self.opts)
+            if callable(items)
+            else None
+        )
 
         tpl = (
             '<li class="dropdown"><a title="{title}" data-toggle="dropdown" href="#"{attrs}>{title}</a>'
@@ -112,7 +120,9 @@ class AdminToolsMixin:
         )
 
         # render all items
-        rendered_tools = list(filter(None, [self.render_tool(request, obj=obj, **tool) for tool in items]))
+        rendered_tools = list(
+            filter(None, [self.render_tool(request, obj=obj, **tool) for tool in items])
+        )
 
         if not rendered_tools:
             # if any item has permission or the list is empty,
@@ -121,8 +131,8 @@ class AdminToolsMixin:
 
         return tpl.format(
             title=self.get_tool_title(title),
-            attrs=format_html_join('', ' {}="{}"', (attrs or {}).items()),
-            items=''.join(rendered_tools)
+            attrs=format_html_join("", ' {}="{}"', (attrs or {}).items()),
+            items="".join(rendered_tools),
         )
 
     def render_tool(self, request, title, url, permission=None, attrs=None, obj=None):
@@ -140,14 +150,14 @@ class AdminToolsMixin:
                 url = partial_call(url, request=request, opts=self.opts, obj=obj)
 
             except TypeError:
-                return ''
+                return ""
 
         attrs = attrs or {}
 
         return tpl.format(
             title=self.get_tool_title(title),
             url=url,
-            attrs=format_html_join('', ' {}="{}"', attrs.items())
+            attrs=format_html_join("", ' {}="{}"', attrs.items()),
         )
 
     def get_object_tools(self, request, view_name, obj=None):
@@ -166,7 +176,7 @@ class AdminToolsMixin:
         rendered_tools = []
 
         for tool in tools:
-            if 'items' in tool:
+            if "items" in tool:
                 rendered_tool = self.render_group(request, obj=obj, **tool)
             else:
                 rendered_tool = self.render_tool(request, obj=obj, **tool)
@@ -184,22 +194,27 @@ class AdminToolsMixin:
         """
         Add the changelist object tools to context.
         """
-        extra_context = (extra_context or {})
-        extra_context['object_tools'] = self.get_object_tools(request, 'changelist')
+        extra_context = extra_context or {}
+        extra_context["object_tools"] = self.get_object_tools(request, "changelist")
         return super().changelist_view(request, extra_context)
 
-    def render_change_form(self, request, context, add=False, change=False, form_url='', obj=None):
+    def render_change_form(
+        self, request, context, add=False, change=False, form_url="", obj=None
+    ):
         """
         Add the change form object tools context.
         """
         if obj is not None:
-            context['object_tools'] = self.get_object_tools(request, 'change', obj)
+            context["object_tools"] = self.get_object_tools(request, "change", obj)
 
         return super().render_change_form(
-            request=request, context=context,
-            add=add, change=change,
+            request=request,
+            context=context,
+            add=add,
+            change=change,
             form_url=form_url,
-            obj=obj)
+            obj=obj,
+        )
 
 
 class AdminViewMixin:
@@ -218,11 +233,11 @@ class AdminViewMixin:
 
         extra_views = []
 
-        for view_name in filter(lambda x: x.endswith('_view'), dir(self)):
+        for view_name in filter(lambda x: x.endswith("_view"), dir(self)):
             # get only views names with the suffix `_view`.
             view_func = getattr(self, view_name)
 
-            if not getattr(view_func, 'is_extra_view', False):
+            if not getattr(view_func, "is_extra_view", False):
                 # ignores if the function was not wrapped
                 # by @admin_view decorator.
                 continue
@@ -238,19 +253,24 @@ class AdminViewMixin:
         admin site urls.
         """
         # resolve the current view name.
-        name = getattr(view, 'name', None) or view.__name__.replace('_view', '').replace('_', '-')
+        name = getattr(view, "name", None) or view.__name__.replace(
+            "_view", ""
+        ).replace("_", "-")
 
         # resolve the current view route.
-        route = getattr(view, 'route', None) or ('%s/' % name)
+        route = getattr(view, "route", None) or ("%s/" % name)
 
-        if getattr(view, 'detail', False):
+        if getattr(view, "detail", False):
             # add object_id argument if the view is a detail view.
-            route = '<path:object_id>/{route}/'.format(route=route.rstrip('/').lstrip('/'))
+            route = "<path:object_id>/{route}/".format(
+                route=route.rstrip("/").lstrip("/")
+            )
 
         def wrap(func):
             """
             Wraps current view as admin view.
             """
+
             def wrapper(*args, **kwargs):
                 return self.admin_site.admin_view(view)(*args, **kwargs)
 
@@ -265,7 +285,7 @@ class AdminViewMixin:
         return wrap(view), name, route
 
     def get_extra_urls(self):
-        opts = getattr(self.model, '_meta')
+        opts = getattr(self.model, "_meta")
         app_label = opts.app_label
         model_name = opts.model_name
 
@@ -275,7 +295,7 @@ class AdminViewMixin:
             view, name, route = self.get_extra_view(view)
 
             urlpatterns.append(
-                path(route, view, name='%s_%s_%s' % (app_label, model_name, name))
+                path(route, view, name="%s_%s_%s" % (app_label, model_name, name))
             )
 
         return urlpatterns

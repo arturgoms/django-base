@@ -2,7 +2,6 @@ from celery import states, exceptions
 
 
 class BaseTask:
-
     def __init__(self, task):
         self._task = task
 
@@ -10,10 +9,13 @@ class BaseTask:
         """
         Explicit fail task.
         """
-        self._task.update_state(state=states.FAILURE, meta={
-            'exc_type': (exc.__class__ if exc else exceptions.TaskError).__name__,
-            'exc_message': message.format(**(params or {}))
-        })
+        self._task.update_state(
+            state=states.FAILURE,
+            meta={
+                "exc_type": (exc.__class__ if exc else exceptions.TaskError).__name__,
+                "exc_message": message.format(**(params or {})),
+            },
+        )
 
         raise exceptions.Ignore()
 

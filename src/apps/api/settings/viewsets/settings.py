@@ -11,11 +11,15 @@ from commons.api import viewsets
 class SettingsViewSet(viewsets.GenericViewSet):
     serializer_class = SettingsSerializer
     pagination_class = SkipPagination
-    lookup_url_kwarg = 'key'
-    lookup_value_regex = r'([\w-]+)'
+    lookup_url_kwarg = "key"
+    lookup_value_regex = r"([\w-]+)"
 
     def list(self, request, *args, **kwargs):
-        data = list(map(lambda x: {'key': x[0], 'value': x[1]}, dynamic_config.get_all().items()))
+        data = list(
+            map(
+                lambda x: {"key": x[0], "value": x[1]}, dynamic_config.get_all().items()
+            )
+        )
         serializer = self.get_serializer(data, many=True)
         return self.get_paginated_response(serializer.data)
 
@@ -28,5 +32,5 @@ class SettingsViewSet(viewsets.GenericViewSet):
         except KeyError as exc:
             raise NotFound() from exc
 
-        serializer = self.get_serializer({'key': key, 'value': value})
+        serializer = self.get_serializer({"key": key, "value": value})
         return Response(serializer.data, status=status.HTTP_200_OK)

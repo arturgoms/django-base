@@ -9,7 +9,7 @@ from commons.urls import get_absolute_uri, querystring
 register = django_template.Library()
 
 
-@register.simple_tag(name='define')
+@register.simple_tag(name="define")
 def do_define(value):
     """
     Helper to define a variable in Django templates.
@@ -45,11 +45,11 @@ class QuerystringNode(Node):
         return querystring(
             url=self.url.resolve(context),
             includes=self.resolve_kwargs(self.includes, context),
-            excludes=self.resolve_args(self.excludes, context)
+            excludes=self.resolve_args(self.excludes, context),
         )
 
 
-@register.tag(name='querystring')
+@register.tag(name="querystring")
 def do_querystring(parser, token):
     """
     Modify a URL including or excluding querystring parameters.
@@ -66,28 +66,32 @@ def do_querystring(parser, token):
     bits = bits[2:]
 
     try:
-        exclude_index = bits.index('excludes')
+        exclude_index = bits.index("excludes")
 
         includes = bits[:exclude_index]
-        excludes = bits[exclude_index + 1:]
+        excludes = bits[exclude_index + 1 :]
 
     except ValueError:
         includes = bits
 
-    includes = filter(lambda x: len(x) == 2, map(lambda x: x.split('='), includes))
+    includes = filter(lambda x: len(x) == 2, map(lambda x: x.split("="), includes))
 
     return QuerystringNode(
         url,
-        includes={parser.compile_filter(key): parser.compile_filter(val) for key, val in includes},
-        excludes=map(parser.compile_filter, excludes))
+        includes={
+            parser.compile_filter(key): parser.compile_filter(val)
+            for key, val in includes
+        },
+        excludes=map(parser.compile_filter, excludes),
+    )
 
 
 class AbsStaticNode(static.StaticNode):
     def url(self, context):
-        return get_absolute_uri(super().url(context), request=context.get('request'))
+        return get_absolute_uri(super().url(context), request=context.get("request"))
 
 
-@register.tag('abs_static')
+@register.tag("abs_static")
 def do_abs_static(parser, token):
     return AbsStaticNode.handle_token(parser, token)
 
@@ -95,7 +99,7 @@ def do_abs_static(parser, token):
 class AbsUrlNode(defaulttags.URLNode):
     def render(self, context):
         """Returns the complete url."""
-        return get_absolute_uri(super().render(context), request=context.get('request'))
+        return get_absolute_uri(super().render(context), request=context.get("request"))
 
     @classmethod
     def handle_token(cls, parser, token):
@@ -104,14 +108,11 @@ class AbsUrlNode(defaulttags.URLNode):
         """
         url = defaulttags.url(parser, token)
         return cls(
-            view_name=url.view_name,
-            args=url.args,
-            kwargs=url.kwargs,
-            asvar=url.asvar
+            view_name=url.view_name, args=url.args, kwargs=url.kwargs, asvar=url.asvar
         )
 
 
-@register.tag('abs_url')
+@register.tag("abs_url")
 def do_abs_url(parser, token):
     return AbsUrlNode.handle_token(parser, token)
 
@@ -121,9 +122,9 @@ def build_absolute_uri(context, url):
     """
     Returns the complete url.
     """
-    return get_absolute_uri(url, request=context.get('request'))
+    return get_absolute_uri(url, request=context.get("request"))
 
 
-@register.filter('strong')
+@register.filter("strong")
 def do_strong(value):
-    return mark_safe(f'<strong>{value}</strong>')
+    return mark_safe(f"<strong>{value}</strong>")

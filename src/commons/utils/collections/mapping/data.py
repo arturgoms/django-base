@@ -4,9 +4,8 @@ from commons.utils import parser
 
 
 class DataDict(Mapping):
-
     def __init__(self, data):
-        assert isinstance(data, Mapping), 'parameter \'data\' must be a mapping type'
+        assert isinstance(data, Mapping), "parameter 'data' must be a mapping type"
         self.mapping = data
 
     def get(self, key, default=None, cast=parser.undefined):

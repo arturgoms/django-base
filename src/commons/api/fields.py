@@ -9,9 +9,11 @@ from rest_framework import serializers
 
 class TimestampField(serializers.Field):
     default_error_messages = {
-        'invalid': _('Datetime has wrong format. Use one of these formats instead: {format}.'),
-        'make_aware': _('Invalid datetime for the timezone "{timezone}".'),
-        'overflow': _('Datetime value out of range.')
+        "invalid": _(
+            "Datetime has wrong format. Use one of these formats instead: {format}."
+        ),
+        "make_aware": _('Invalid datetime for the timezone "{timezone}".'),
+        "overflow": _("Datetime value out of range."),
     }
 
     def __init__(self, *args, default_timezone=None, **kwargs):
@@ -44,10 +46,10 @@ class TimestampField(serializers.Field):
                 value = timezone.make_naive(value, timezone.utc)
 
         except InvalidTimeError:
-            self.fail('make_aware', timezone=timezone_)
+            self.fail("make_aware", timezone=timezone_)
 
         except OverflowError:
-            self.fail('overflow')
+            self.fail("overflow")
 
         return value
 
@@ -80,7 +82,7 @@ class TimestampField(serializers.Field):
         value = self._from_timestamp(data)
 
         if not value:
-            self.fail('invalid')
+            self.fail("invalid")
 
         return self.enforce_timezone(value)
 

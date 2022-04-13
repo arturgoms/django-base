@@ -58,7 +58,9 @@ MEDIA_ROOT = BASE_DIR / "media/"
 
 SILKY_IGNORE_URLS = ["/admin/", "/en-us/admin/", "/pt-br/admin/", "/media/", "/static/"]
 
-SILKY_INTERCEPT_FUNC = lambda request: not any(map(request.path.startswith, SILKY_IGNORE_URLS))  # noqa
+SILKY_INTERCEPT_FUNC = lambda request: not any(
+    map(request.path.startswith, SILKY_IGNORE_URLS)
+)  # noqa
 
 # Conference Client
 

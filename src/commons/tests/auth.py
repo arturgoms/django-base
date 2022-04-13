@@ -12,9 +12,10 @@ class TestAuthenticationClient(auth.BaseAuthenticationClient):
 
     ``Authorization: Email {email}``
     """
+
     def authenticate(self, request):
         try:
-            role, identity = get_authorization_header(request).decode('utf-8').split()
+            role, identity = get_authorization_header(request).decode("utf-8").split()
 
         except (TypeError, ValueError):
             # deny token is not in a valid format.

@@ -20,8 +20,8 @@ def paginate_queryset(request, queryset, page_size=None, paginator_cls=None):
     paginator_cls = paginator_cls or Paginator
 
     query = DataDict(request.GET)
-    page_size = page_size or query.get('page_size', default=10, cast=int)
-    page_number = query.get('page', default=1, cast=int)
+    page_size = page_size or query.get("page_size", default=10, cast=int)
+    page_number = query.get("page", default=1, cast=int)
 
     return paginator_cls(queryset, per_page=page_size).page(page_number)
 
@@ -44,7 +44,7 @@ def filter_queryset(request, queryset, filters):
     return queryset
 
 
-def sort_queryset(request, queryset, sortable_fields, sort_url_kwarg='sort'):
+def sort_queryset(request, queryset, sortable_fields, sort_url_kwarg="sort"):
     """
     Sort a given queryset based on provided sort fields.
 
@@ -66,21 +66,26 @@ def sort_queryset(request, queryset, sortable_fields, sort_url_kwarg='sort'):
         >>>    })
         >>> ])
     """
-    sortable_fields = dict(map(lambda x: (x, {}) if isinstance(x, str) else (x[0], x[1]), sortable_fields))
+    sortable_fields = dict(
+        map(lambda x: (x, {}) if isinstance(x, str) else (x[0], x[1]), sortable_fields)
+    )
     fields = []
 
-    for field in (DataDict(request.GET).get(sort_url_kwarg, cast=parser.csv()) or []):
-        field_name = field.lstrip('-')
+    for field in DataDict(request.GET).get(sort_url_kwarg, cast=parser.csv()) or []:
+        field_name = field.lstrip("-")
 
         if field_name not in sortable_fields:
             continue
 
-        fields.append((
-            field_name, {
-                **sortable_fields.get(field_name, {}),
-                'descending': field.startswith('-')
-            }
-        ))
+        fields.append(
+            (
+                field_name,
+                {
+                    **sortable_fields.get(field_name, {}),
+                    "descending": field.startswith("-"),
+                },
+            )
+        )
 
     if not fields:
         return queryset
@@ -99,5 +104,7 @@ def get_model_field(model, field_name):
     Returns:
         models.db.Field
     """
-    opts = getattr(model, '_meta')
-    return first_or_default(opts.fields, func=lambda x: x.name == field_name, default=None)
+    opts = getattr(model, "_meta")
+    return first_or_default(
+        opts.fields, func=lambda x: x.name == field_name, default=None
+    )

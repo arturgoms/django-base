@@ -11,7 +11,9 @@ class IsAuthenticated(BasePermission):
 
     def has_permission(self, request, view):
         return bool(
-            request.method in ['HEAD', 'OPTIONS'] or request.user and request.user.is_authenticated
+            request.method in ["HEAD", "OPTIONS"]
+            or request.user
+            and request.user.is_authenticated
         )
 
 
@@ -23,10 +25,11 @@ class IsPublic(BasePermission):
     This permission checks whether the consumer knows the access key
     to access these content.
     """
-    message = _('Invalid authorization header.')
 
-    scheme = getattr(settings, 'PUBLIC_API_AUTHORIZATION_SCHEME', 'public')
-    access_key = getattr(settings, 'PUBLIC_API_ACCESS_KEY', '')
+    message = _("Invalid authorization header.")
+
+    scheme = getattr(settings, "PUBLIC_API_AUTHORIZATION_SCHEME", "public")
+    access_key = getattr(settings, "PUBLIC_API_ACCESS_KEY", "")
 
     def is_authorized(self, request):
         """
@@ -39,10 +42,12 @@ class IsPublic(BasePermission):
             (bool, str)
         """
         try:
-            scheme, access_key = get_authorization_header(request).decode('utf-8').split()
+            scheme, access_key = (
+                get_authorization_header(request).decode("utf-8").split()
+            )
 
             if scheme.lower() != self.scheme.lower():
-                raise ValueError('Invalid scheme.')
+                raise ValueError("Invalid scheme.")
 
         except (TypeError, ValueError):
             # deny token is not in a valid format.
@@ -55,7 +60,7 @@ class IsPublic(BasePermission):
         """
         Ensure that only allowed consumers will have access to the content.
         """
-        if request.method.lower() == 'options':
+        if request.method.lower() == "options":
             # if the request method is options just
             # allow the request.
             return True

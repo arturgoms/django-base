@@ -1,8 +1,5 @@
-
-
 # pylint: disable=invalid-name
 class switch:
-
     def __init__(self, value):
         self._value = value
         self._cases = []
@@ -32,10 +29,13 @@ class switch:
             Any
         """
         try:
-            return next((
-                then for when, then in self._cases
-                if when == self._value or (callable(when) and when(self._value))
-            ))
+            return next(
+                (
+                    then
+                    for when, then in self._cases
+                    if when == self._value or (callable(when) and when(self._value))
+                )
+            )
 
         except StopIteration:
             return default

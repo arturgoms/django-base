@@ -3,14 +3,13 @@ import datetime
 import jwt
 from django.conf import settings
 
-JWT_KEY = getattr(settings, 'JWT_KEY')
-JWT_EXP = getattr(settings, 'JWT_EXP')
+JWT_KEY = getattr(settings, "JWT_KEY")
+JWT_EXP = getattr(settings, "JWT_EXP")
 
 
 class Jwt:
-
     @staticmethod
-    def generate(key, algorithm='HS256', exp=None, **claims):
+    def generate(key, algorithm="HS256", exp=None, **claims):
         """
         Generate a jwt token based on provided claims.
 
@@ -24,15 +23,15 @@ class Jwt:
         """
         now = datetime.datetime.utcnow()
 
-        claims['iat'] = now
+        claims["iat"] = now
 
         if exp is not None:
-            claims['exp'] = now + datetime.timedelta(seconds=exp)
+            claims["exp"] = now + datetime.timedelta(seconds=exp)
 
-        return jwt.encode(claims, key, algorithm).decode('utf-8')
+        return jwt.encode(claims, key, algorithm).decode("utf-8")
 
     @staticmethod
-    def verify(token, key, algorithm='HS256'):
+    def verify(token, key, algorithm="HS256"):
         try:
             claims = jwt.decode(token, key, algorithms=[algorithm])
 

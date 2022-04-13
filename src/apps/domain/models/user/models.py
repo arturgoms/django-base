@@ -12,30 +12,25 @@ from commons.models.base import Model
 
 
 class User(AbstractBaseUser, Model):
-
     class Status(models.IntegerChoices):
-        ACTIVE = 1, _('Active')
-        BLOCKED = 2, _('Blocked')
+        ACTIVE = 1, _("Active")
+        BLOCKED = 2, _("Blocked")
 
-    name = models.CharField(
-        _('Name'), max_length=60)
+    name = models.CharField(_("Name"), max_length=60)
 
-    email = models.EmailField(
-        _('Email'), unique=True)
+    email = models.EmailField(_("Email"), unique=True)
 
-    date_joined = models.DateField(
-        _('Date Joined'), default=timezone.now)
+    date_joined = models.DateField(_("Date Joined"), default=timezone.now)
 
     status = models.PositiveSmallIntegerField(
-        _('Status'), choices=Status.choices,
-        default=Status.ACTIVE)
+        _("Status"), choices=Status.choices, default=Status.ACTIVE
+    )
 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = ["name"]
 
     is_staff = True
-    is_superuser = models.BooleanField(
-        _('Is Superuser'), default=False)
+    is_superuser = models.BooleanField(_("Is Superuser"), default=False)
 
     objects = UserManager()
 
@@ -88,7 +83,7 @@ def create_superuser(sender, *args, **kwargs):
     if sender.label == User._meta.app_label and not User.objects.exists():
         # create super user with project settings information.
         User.objects.create_superuser(
-            name=getattr(settings, 'SUPERUSER_NAME'),
-            email=getattr(settings, 'SUPERUSER_EMAIL'),
-            password=getattr(settings, 'SUPERUSER_PASSWORD')
+            name=getattr(settings, "SUPERUSER_NAME"),
+            email=getattr(settings, "SUPERUSER_EMAIL"),
+            password=getattr(settings, "SUPERUSER_PASSWORD"),
         )

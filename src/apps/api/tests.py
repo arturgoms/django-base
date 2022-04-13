@@ -26,20 +26,21 @@ class AuthenticatedAPITestCase(APITestCase):
         #     role = UserRoleEnum.SUPPLIER.value
 
         else:
-            raise TypeError('Instance must be \'domain.models.User\' type.')
+            raise TypeError("Instance must be 'domain.models.User' type.")
 
-        self.client.defaults['HTTP_AUTHORIZATION'] = f'{role} {user.pk}'
+        self.client.defaults["HTTP_AUTHORIZATION"] = f"{role} {user.pk}"
 
     def unauthenticated(self):
         """
         Clear authentication header from request client.
         """
-        if 'HTTP_AUTHORIZATION' in self.client.defaults:
-            del self.client.defaults['HTTP_AUTHORIZATION']
+        if "HTTP_AUTHORIZATION" in self.client.defaults:
+            del self.client.defaults["HTTP_AUTHORIZATION"]
 
 
 class AuthenticatedUserAPITestCase(AuthenticatedAPITestCase):
     """
     Use when the default authenticated user is a User.
     """
+
     auth_user_model = models.User

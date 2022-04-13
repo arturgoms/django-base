@@ -5,7 +5,7 @@ from django.utils.functional import cached_property
 from django.utils.module_loading import import_string
 from rest_framework import authentication
 
-AUTHENTICATION_CLIENT = getattr(settings, 'AUTHENTICATION_CLIENT')
+AUTHENTICATION_CLIENT = getattr(settings, "AUTHENTICATION_CLIENT")
 
 
 def get_authentication_client():
@@ -19,7 +19,8 @@ class BaseAuthenticationClient:
     """
     Provides the ability to authenticate by using request.
     """
-    scheme = 'bearer'
+
+    scheme = "bearer"
 
     def authenticate(self, request):
         """
@@ -29,7 +30,6 @@ class BaseAuthenticationClient:
 
 
 class ClientAuthentication(authentication.BaseAuthentication):
-
     @cached_property
     def client(self):
         """
@@ -50,16 +50,19 @@ class ClientAuthentication(authentication.BaseAuthentication):
         header in a `401 Unauthenticated` response, or `None` if the
         authentication scheme should return `403 Permission Denied` responses.
         """
-        return 'WWW-Authenticate'
+        return "WWW-Authenticate"
 
 
 class AuthenticatedUser:
     """
     Object to represent an authenticated user.
     """
-    _db_representation_error = 'Django does not provide a DB representation for \'{name}\'.'
 
-    USERNAME_FIELD = 'pk'
+    _db_representation_error = (
+        "Django does not provide a DB representation for '{name}'."
+    )
+
+    USERNAME_FIELD = "pk"
 
     is_superuser = False
     is_staff = False
@@ -80,19 +83,27 @@ class AuthenticatedUser:
             setattr(self, key, val)
 
     def __repr__(self):
-        return f'<{type(self).__name__}: {self.pk}>'
+        return f"<{type(self).__name__}: {self.pk}>"
 
     def get_username(self):
         return getattr(self, AuthenticatedUser.USERNAME_FIELD, None)
 
     def save(self):
-        raise NotImplementedError(self._db_representation_error.format(name=type(self).__name__))
+        raise NotImplementedError(
+            self._db_representation_error.format(name=type(self).__name__)
+        )
 
     def delete(self):
-        raise NotImplementedError(self._db_representation_error.format(name=type(self).__name__))
+        raise NotImplementedError(
+            self._db_representation_error.format(name=type(self).__name__)
+        )
 
     def set_password(self, raw_password):
-        raise NotImplementedError(self._db_representation_error.format(name=type(self).__name__))
+        raise NotImplementedError(
+            self._db_representation_error.format(name=type(self).__name__)
+        )
 
     def check_password(self, raw_password):
-        raise NotImplementedError(self._db_representation_error.format(name=type(self).__name__))
+        raise NotImplementedError(
+            self._db_representation_error.format(name=type(self).__name__)
+        )

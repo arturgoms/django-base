@@ -1,5 +1,3 @@
-
-
 class ContextFormMixin:
     """
     Provides the ability to receive extra context
@@ -10,5 +8,5 @@ class ContextFormMixin:
         """
         Remove context from kwargs and set to instance if exists.
         """
-        self.context = kwargs.pop('context', {})
+        self.context = kwargs.pop("context", {})
         super().__init__(*args, **kwargs)

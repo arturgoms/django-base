@@ -23,10 +23,10 @@ def admin_url_pattern(path=None):
     """
     Returns admin url based on settings.
     """
-    admin_url_prefix = getattr(settings, 'ADMIN_SITE_URL_PREFIX', None) or '/admin/'
-    output = [admin_url_prefix.rstrip('/').lstrip('/')]
+    admin_url_prefix = getattr(settings, "ADMIN_SITE_URL_PREFIX", None) or "/admin/"
+    output = [admin_url_prefix.rstrip("/").lstrip("/")]
 
     if path:
-        output.append(path.rstrip('/').lstrip('/'))
+        output.append(path.rstrip("/").lstrip("/"))
 
-    return '%s/' % '/'.join(output)
+    return "%s/" % "/".join(output)

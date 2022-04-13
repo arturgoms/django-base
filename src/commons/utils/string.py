@@ -28,7 +28,7 @@ def digits(s):
     Returns:
         str
     """
-    return str.join('', filter(lambda x: x.isdigit(), s))
+    return str.join("", filter(lambda x: x.isdigit(), s))
 
 
 def strip_accents(s):
@@ -41,10 +41,7 @@ def strip_accents(s):
     Returns:
         str
     """
-    return unicodedata \
-        .normalize('NFKD', s) \
-        .encode('ascii', 'ignore') \
-        .decode('utf-8')
+    return unicodedata.normalize("NFKD", s).encode("ascii", "ignore").decode("utf-8")
 
 
 def match(pattern, s):
@@ -60,9 +57,6 @@ def match(pattern, s):
     Returns:
         bool
     """
-    pattern = pattern \
-        .replace('*', '(.+)') \
-        .lstrip('^') \
-        .rstrip('$')
+    pattern = pattern.replace("*", "(.+)").lstrip("^").rstrip("$")
 
-    return bool(re.match(rf'^{pattern}$', s))
+    return bool(re.match(rf"^{pattern}$", s))

@@ -45,6 +45,7 @@ class Select2Widget(forms.Select):
     Renders the necessary data attributes for select2 and adds the static form
     media.
     """
+
     def build_attrs(self, base_attrs, extra_attrs=None):
         """
         Set select2's AJAX attributes.
@@ -54,32 +55,40 @@ class Select2Widget(forms.Select):
         https://select2.org/configuration/data-attributes#nested-subkey-options
         """
         attrs = super().build_attrs(base_attrs, extra_attrs=extra_attrs)
-        attrs.setdefault('class', '')
-        attrs.update({
-            'data-theme': 'admin-select',
-            'data-allow-clear': json.dumps(not self.is_required),
-            'data-placeholder': '',  # Allows clearing of the input.
-            'class': attrs['class'] + (' ' if attrs['class'] else '') + 'admin-select',
-        })
+        attrs.setdefault("class", "")
+        attrs.update(
+            {
+                "data-theme": "admin-select",
+                "data-allow-clear": json.dumps(not self.is_required),
+                "data-placeholder": "",  # Allows clearing of the input.
+                "class": attrs["class"]
+                + (" " if attrs["class"] else "")
+                + "admin-select",
+            }
+        )
         return attrs
 
     @property
     def media(self):
-        extra = '' if settings.DEBUG else '.min'
+        extra = "" if settings.DEBUG else ".min"
         i18n_name = SELECT2_TRANSLATIONS.get(get_language())
-        i18n_file = ('admin/js/vendor/select2/i18n/%s.js' % i18n_name,) if i18n_name else ()
+        i18n_file = (
+            ("admin/js/vendor/select2/i18n/%s.js" % i18n_name,) if i18n_name else ()
+        )
         return forms.Media(
             js=(
-                   'admin/js/vendor/jquery/jquery%s.js' % extra,
-                   'admin/js/vendor/select2/select2.full%s.js' % extra,
-               ) + i18n_file + (
-                   'admin/js/jquery.init.js',
-                   'admin/js/select.js',
-               ),
+                "admin/js/vendor/jquery/jquery%s.js" % extra,
+                "admin/js/vendor/select2/select2.full%s.js" % extra,
+            )
+            + i18n_file
+            + (
+                "admin/js/jquery.init.js",
+                "admin/js/select.js",
+            ),
             css={
-                'screen': (
-                    'admin/css/vendor/select2/select2%s.css' % extra,
-                    'admin/css/select.css',
+                "screen": (
+                    "admin/css/vendor/select2/select2%s.css" % extra,
+                    "admin/css/select.css",
                 ),
             },
         )
@@ -89,8 +98,9 @@ class ImageCropperWidget(forms.TextInput):
     """
     This widget can be used to render an image input with a cropper.
     """
-    template_name = 'forms/widgets/image_cropper.html'
-    input_text = _('Change')
+
+    template_name = "forms/widgets/image_cropper.html"
+    input_text = _("Change")
 
     def __init__(self, attrs=None, aspect_ratio=None, filename=None, modifier=None):
         super().__init__(attrs)
@@ -102,7 +112,7 @@ class ImageCropperWidget(forms.TextInput):
         """
         Return whether value is considered to be initial value.
         """
-        return bool(value and getattr(value, 'url', False))
+        return bool(value and getattr(value, "url", False))
 
     def format_value(self, value):
         """
@@ -122,7 +132,7 @@ class ImageCropperWidget(forms.TextInput):
             return None
 
         # get content type and b64content.
-        __, content_type, __, b64image = re.split(r'[,;:]', value)
+        __, content_type, __, b64image = re.split(r"[,;:]", value)
 
         # apply the defined modifier to image bytes.
         stream = self.modifier(io.BytesIO(base64.b64decode(b64image)))
@@ -132,23 +142,31 @@ class ImageCropperWidget(forms.TextInput):
             file=stream,
             content_type=content_type,
             field_name=name,
-            name=(self.filename() if callable(self.filename) else self.filename) or f'{uuid.uuid4()}.jpg',
+            name=(self.filename() if callable(self.filename) else self.filename)
+            or f"{uuid.uuid4()}.jpg",
             size=stream.getbuffer().nbytes,
-            charset=None)
+            charset=None,
+        )
 
     def get_context(self, name, value, attrs):
         attrs = attrs or {}
 
-        context = super().get_context(name, value, {
-            **attrs,
-            'class': ' '.join(set(attrs.get('class', '').split() + ['hidden']))
-        })
+        context = super().get_context(
+            name,
+            value,
+            {
+                **attrs,
+                "class": " ".join(set(attrs.get("class", "").split() + ["hidden"])),
+            },
+        )
 
-        context['widget'].update({
-            'is_initial': self.is_initial(value),
-            'aspect_ratios': self.aspect_ratios,
-            'input_text': self.input_text
-        })
+        context["widget"].update(
+            {
+                "is_initial": self.is_initial(value),
+                "aspect_ratios": self.aspect_ratios,
+                "input_text": self.input_text,
+            }
+        )
 
         return context
 
@@ -158,6 +176,6 @@ class ImageCropperWidget(forms.TextInput):
         ColorPickerInput's Media
         """
         return Media(
-            js=['admin/cropper/cropper.min.js'],
-            css={'all': ['admin/cropper/cropper.min.css']},
+            js=["admin/cropper/cropper.min.js"],
+            css={"all": ["admin/cropper/cropper.min.css"]},
         )

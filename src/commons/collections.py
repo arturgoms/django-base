@@ -3,7 +3,7 @@ import collections
 from commons.string import camel_case_to_snake_case
 
 
-def flatten_map(mapping, parent_key=None, sep='_'):
+def flatten_map(mapping, parent_key=None, sep="_"):
     """
     Flat nested mapping keys into a single level.
     """

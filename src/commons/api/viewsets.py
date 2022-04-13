@@ -16,8 +16,10 @@ class GenericViewSet(ViewSetMixin, generics.GenericAPIView):
         Return the serializer instance that should be used for validating and
         deserializing input, and for serializing output.
         """
-        serializer_class = kwargs.pop('serializer_class', None) or self.get_serializer_class()
-        kwargs.setdefault('context', self.get_serializer_context())
+        serializer_class = (
+            kwargs.pop("serializer_class", None) or self.get_serializer_class()
+        )
+        kwargs.setdefault("context", self.get_serializer_context())
         return serializer_class(*args, **kwargs)
 
 
@@ -51,20 +53,22 @@ class DestroyModelViewSet(mixins.DestroyModelMixin, GenericViewSet):
     """
 
 
-class ReadOnlyModelViewSet(mixins.RetrieveModelMixin,
-                           mixins.ListModelMixin,
-                           GenericViewSet):
+class ReadOnlyModelViewSet(
+    mixins.RetrieveModelMixin, mixins.ListModelMixin, GenericViewSet
+):
     """
     A viewset that provides default `list()` and `retrieve()` actions.
     """
 
 
-class ModelViewSet(mixins.CreateModelMixin,
-                   mixins.RetrieveModelMixin,
-                   mixins.UpdateModelMixin,
-                   mixins.DestroyModelMixin,
-                   mixins.ListModelMixin,
-                   GenericViewSet):
+class ModelViewSet(
+    mixins.CreateModelMixin,
+    mixins.RetrieveModelMixin,
+    mixins.UpdateModelMixin,
+    mixins.DestroyModelMixin,
+    mixins.ListModelMixin,
+    GenericViewSet,
+):
     """
     A viewset that provides default `create()`, `retrieve()`, `update()`,
     `partial_update()`, `destroy()` and `list()` actions.

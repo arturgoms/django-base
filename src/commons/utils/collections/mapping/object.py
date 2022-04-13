@@ -5,8 +5,9 @@ class ObjectDict(Mapping):
     """
     Provides the ability to handle a Mapping as a Object.
     """
+
     def __init__(self, data):
-        assert isinstance(data, Mapping), 'parameter \'data\' must be a mapping type'
+        assert isinstance(data, Mapping), "parameter 'data' must be a mapping type"
         self._mapping = data
 
     def _get_value(self, key):
@@ -59,7 +60,8 @@ class ObjectDict(Mapping):
                 return self._get_value(item)
 
             except KeyError:
-                raise AttributeError('type object \'{name}\' has no attribute {attr}'.format(
-                    name=self.__class__.__name__,
-                    attr=item
-                ))
+                raise AttributeError(
+                    "type object '{name}' has no attribute {attr}".format(
+                        name=self.__class__.__name__, attr=item
+                    )
+                )

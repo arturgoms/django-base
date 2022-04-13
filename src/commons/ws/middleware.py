@@ -26,7 +26,9 @@ class QueryAuthMiddleware:
                 # deny if there is no user claims.
                 return None
 
-            scope["user"] = auth.AuthenticatedUser(pk=claims.get('id'), role=claims.get('role'))
+            scope["user"] = auth.AuthenticatedUser(
+                pk=claims.get("id"), role=claims.get("role")
+            )
 
         except (TypeError, ValueError):
             scope["user"] = AnonymousUser()

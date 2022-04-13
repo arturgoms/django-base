@@ -1,7 +1,9 @@
 from commons.djutils.notification.base import get_connection, Notification
 
 
-def send_topic_notification(title, content, recipient_list, payload=None, fail_silently=False, connection=None):
+def send_topic_notification(
+    title, content, recipient_list, payload=None, fail_silently=False, connection=None
+):
     """
     Easy wrapper for sending a single topic notification to a recipient list.
 
@@ -11,16 +13,20 @@ def send_topic_notification(title, content, recipient_list, payload=None, fail_s
     connection = connection or get_connection()
 
     notification = Notification(
-        title, content,
+        title,
+        content,
         to=recipient_list,
         payload=payload,
         connection=connection,
-        type=Notification.TOPIC)
+        type=Notification.TOPIC,
+    )
 
     return notification.send(fail_silently=fail_silently)
 
 
-def send_device_notification(title, content, recipient_list, payload=None, fail_silently=False, connection=None):
+def send_device_notification(
+    title, content, recipient_list, payload=None, fail_silently=False, connection=None
+):
     """
     Easy wrapper for sending a single device notification to a recipient list.
 
@@ -30,10 +36,12 @@ def send_device_notification(title, content, recipient_list, payload=None, fail_
     connection = connection or get_connection()
 
     notification = Notification(
-        title, content,
+        title,
+        content,
         to=recipient_list,
         payload=payload,
         connection=connection,
-        type=Notification.DEVICE)
+        type=Notification.DEVICE,
+    )
 
     return notification.send(fail_silently=fail_silently)

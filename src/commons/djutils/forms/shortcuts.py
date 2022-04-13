@@ -1,5 +1,3 @@
-
-
 def get_form(request, form_cls, instance=None, **kwargs):
     """
     Returns a form instance from a given request.
@@ -14,9 +12,9 @@ def get_form(request, form_cls, instance=None, **kwargs):
         django.forms.ModelForm
     """
     if instance:
-        kwargs['instance'] = instance
+        kwargs["instance"] = instance
 
-    if request.method in ('POST', 'PUT'):
-        kwargs.update({'data': request.POST, 'files': request.FILES})
+    if request.method in ("POST", "PUT"):
+        kwargs.update({"data": request.POST, "files": request.FILES})
 
     return form_cls(**kwargs)

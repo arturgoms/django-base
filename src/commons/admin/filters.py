@@ -12,14 +12,13 @@ class RelatedFilter(SimpleListFilter):
         """
         if self.related_queryset is None:
             raise ImproperlyConfigured(
-                'Missing ``related_queryset`` attribute on %s' % self.__class__.__name__
+                "Missing ``related_queryset`` attribute on %s" % self.__class__.__name__
             )
 
         queryset = self.related_queryset
 
         lookups = {
-            key: request.GET.get(key)
-            for key in (self.required_parameter_names or [])
+            key: request.GET.get(key) for key in (self.required_parameter_names or [])
         }
 
         if not all(lookups.values()):
@@ -54,9 +53,7 @@ class RelatedFilter(SimpleListFilter):
         """
         value = self.value()
 
-        return queryset.filter(**{
-            self.parameter_name: value if value != '-' else None
-        })
+        return queryset.filter(**{self.parameter_name: value if value != "-" else None})
 
 
 class HiddenFilter(SimpleListFilter):
@@ -68,7 +65,7 @@ class HiddenFilter(SimpleListFilter):
     def queryset(self, request, queryset):
         value = self.value()
 
-        if not value or value == '-':
+        if not value or value == "-":
             # skip filter
             return queryset
 
@@ -80,8 +77,8 @@ class HiddenFilter(SimpleListFilter):
         Returns the class with field defined.
         """
         # returns modified class.
-        return type('SimpleFilter', (cls,), {
-            **kwargs,
-            'title': '',
-            'parameter_name': parameter_name
-        })
+        return type(
+            "SimpleFilter",
+            (cls,),
+            {**kwargs, "title": "", "parameter_name": parameter_name},
+        )

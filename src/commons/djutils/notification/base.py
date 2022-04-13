@@ -37,18 +37,23 @@ class Notification:
          connection (NotificationBackend, optional): Connection to be used to send notification.
             If not defined will use the settings.NOTIFICATION_BACKEND value.
     """
-    DEVICE = 'device'
-    TOPIC = 'topic'
 
-    def __init__(self, title='', content='', payload=None, to=None, type=None, connection=None):  # noqa
+    DEVICE = "device"
+    TOPIC = "topic"
+
+    def __init__(
+        self, title="", content="", payload=None, to=None, type=None, connection=None
+    ):  # noqa
         if to:
             assert isinstance(to, Sequence), '"to" argument must be a sequence'
             self.to = list(to)
         else:
             self.to = []
 
-        assert type in {Notification.DEVICE, Notification.TOPIC}, \
-            f'"type" argument accept only {Notification.DEVICE} or {Notification.TOPIC} values.'
+        assert type in {
+            Notification.DEVICE,
+            Notification.TOPIC,
+        }, f'"type" argument accept only {Notification.DEVICE} or {Notification.TOPIC} values.'
 
         self.title = title
         self.content = content
@@ -57,7 +62,7 @@ class Notification:
         self.connection = connection
 
     def __repr__(self):
-        return f'Notification(\'{self.title}\', \'{self.content}\', {self.payload!r}, {self.to!r}, \'{self.type}\')'
+        return f"Notification('{self.title}', '{self.content}', {self.payload!r}, {self.to!r}, '{self.type}')"
 
     def get_connection(self, fail_silently=False):
         """Returns the connection to send the notification."""
@@ -79,19 +84,20 @@ class Notification:
         """
         Returns a copy of current object by applying updates.
         """
-        return Notification(**{
-            'title': self.title,
-            'content': self.content,
-            'payload': self.payload,
-            'to': self.to,
-            'type': self.type,
-            'connection': self.connection,
-            **update
-        })
+        return Notification(
+            **{
+                "title": self.title,
+                "content": self.content,
+                "payload": self.payload,
+                "to": self.to,
+                "type": self.type,
+                "connection": self.connection,
+                **update,
+            }
+        )
 
 
 class BaseNotificationBackend:
-
     def __init__(self, fail_silently=False, **kwargs):
         self.fail_silently = fail_silently
 
@@ -135,4 +141,6 @@ class BaseNotificationBackend:
         """
         Send one Notification object and return the number of notifications sent.
         """
-        raise NotImplementedError('subclasses of BaseNotificationBackend must override send() method')
+        raise NotImplementedError(
+            "subclasses of BaseNotificationBackend must override send() method"
+        )

@@ -9,6 +9,7 @@ class CallableQuerysetMixin:
     which will force the update of the queryset.
     Related to issue http://code.djangoproject.com/ticket/8378
     """
+
     queryset = None
 
     def get_queryset(self):
@@ -30,6 +31,7 @@ class FilterQuerysetMixin:
     """
     Mixin to apply filters to the queryset.
     """
+
     filters = None
 
     def get_filters(self):
@@ -60,8 +62,9 @@ class SortQuerysetMixin:
     """
     Mixin for handling a queryset and sort it
     """
+
     sortable_fields = None
-    sort_url_kwarg = 'sort'
+    sort_url_kwarg = "sort"
 
     def get_sortable_fields(self):
         """
@@ -92,9 +95,11 @@ class SortQuerysetMixin:
             models.db.Queryset
         """
         return sort_queryset(
-            self.request, queryset,
+            self.request,
+            queryset,
             sortable_fields=self.get_sortable_fields(),
-            sort_url_kwarg=self.get_sort_url_kwarg())
+            sort_url_kwarg=self.get_sort_url_kwarg(),
+        )
 
     def filter_queryset(self, queryset):
         """

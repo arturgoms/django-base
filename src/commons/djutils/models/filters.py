@@ -24,6 +24,7 @@ class BaseFilter:
     """
     Define the filter object with expected features.
     """
+
     def __init__(self, url_kwarg):
         self.url_kwarg = url_kwarg
 
@@ -52,8 +53,14 @@ class BaseFilter:
 
 
 class Filter(BaseFilter):
-
-    def __init__(self, url_kwarg, lookup=None, default=unset, distinct=False, cast=parser.undefined):
+    def __init__(
+        self,
+        url_kwarg,
+        lookup=None,
+        default=unset,
+        distinct=False,
+        cast=parser.undefined,
+    ):
         super().__init__(url_kwarg)
 
         self.lookup = lookup or url_kwarg
@@ -82,6 +89,7 @@ class ChoiceFilter(Filter):
     """
     Filter the queryset based on a available choice.
     """
+
     def __init__(self, url_kwarg, choices, *args, **kwargs):
         super().__init__(url_kwarg, *args, **kwargs)
 
@@ -96,8 +104,7 @@ class ChoiceFilter(Filter):
 
 
 class Search(BaseFilter):
-
-    def __init__(self, lookups, url_kwarg='query', distinct=False):
+    def __init__(self, lookups, url_kwarg="query", distinct=False):
         super().__init__(url_kwarg)
 
         self.lookups = lookups
@@ -110,9 +117,8 @@ class Search(BaseFilter):
             return queryset
 
         queryset = queryset.filter(
-            functools.reduce(
-                operator.or_, map(lambda x: Q(**{x: value}), self.lookups)
-            ))
+            functools.reduce(operator.or_, map(lambda x: Q(**{x: value}), self.lookups))
+        )
 
         if self.distinct:
             queryset = queryset.distinct()

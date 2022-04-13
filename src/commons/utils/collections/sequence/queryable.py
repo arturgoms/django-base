@@ -7,7 +7,6 @@ from commons.utils.collections import first_or_default
 
 
 class Queryable(Sequence):
-
     def __init__(self, sequence):
         self._sequence = list(sequence)
         self._len = len(self._sequence)
@@ -120,7 +119,9 @@ class Queryable(Sequence):
         Returns:
             int
         """
-        result = Queryable(self.filter(value if callable(value) else lambda x: x == value))
+        result = Queryable(
+            self.filter(value if callable(value) else lambda x: x == value)
+        )
         return len(result)
 
     def first(self):
@@ -182,7 +183,7 @@ class Queryable(Sequence):
 
     def __repr__(self):
         if self._len > 10:
-            head, tail = ', '.join(map(repr, self._sequence[:8])), repr(self.last())
+            head, tail = ", ".join(map(repr, self._sequence[:8])), repr(self.last())
             return f"{type(self).__name__}([{head}, ..., {tail}])"
 
         return f"{type(self).__name__}({self._sequence!r})"

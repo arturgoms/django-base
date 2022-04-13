@@ -19,7 +19,7 @@ def autodiscovery(root_module, _globals, *, condition, resolver=lambda x: x):
 
     for (_, module_name, _) in iter_modules([str(package_dir)]):
         try:
-            module = find_spec(resolver(f'{root_module}.{module_name}'))
+            module = find_spec(resolver(f"{root_module}.{module_name}"))
 
             if not module:
                 # ignore when no module was found.
@@ -31,5 +31,7 @@ def autodiscovery(root_module, _globals, *, condition, resolver=lambda x: x):
         else:
             module = module.loader.load_module()
 
-        for attribute in filter(condition, map(lambda x: getattr(module, x), dir(module))):
+        for attribute in filter(
+            condition, map(lambda x: getattr(module, x), dir(module))
+        ):
             _globals[attribute.__name__] = attribute

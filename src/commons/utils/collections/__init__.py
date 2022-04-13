@@ -4,7 +4,10 @@ from commons.utils.collections.sequence import Queryable
 
 
 __all__ = [
-    'coalesce', 'chunks', 'first_or_default',
-    'DataDict', 'ObjectDict',
-    'Queryable'
+    "coalesce",
+    "chunks",
+    "first_or_default",
+    "DataDict",
+    "ObjectDict",
+    "Queryable",
 ]

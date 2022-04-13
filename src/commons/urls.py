@@ -30,13 +30,12 @@ def get_absolute_uri(url, request=None, domain=None):
     Returns an absolute url for a given url.
     """
     if not request:
-        domain = ((domain or getattr(settings, 'DOMAIN', '')) or '') \
-            .rstrip('/')
+        domain = ((domain or getattr(settings, "DOMAIN", "")) or "").rstrip("/")
 
-        url = url.lstrip('/')
+        url = url.lstrip("/")
 
         # resolve the absolute path based in the domain
         # variable if request is missing.
-        return f'{domain}/{url}'
+        return f"{domain}/{url}"
 
     return request.build_absolute_uri(url)

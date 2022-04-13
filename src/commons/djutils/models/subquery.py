@@ -6,7 +6,7 @@ class SubqueryCount(models.Subquery):  # noqa
     output_field = models.IntegerField()
 
     def __init__(self, queryset, *args, fields=None, **kwargs):
-        queryset = queryset.values(*(fields or ['id']))
+        queryset = queryset.values(*(fields or ["id"]))
         super().__init__(queryset, *args, **kwargs)
 
     def resolve_expression(self, query=None, *args, **kwargs):

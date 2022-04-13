@@ -7,6 +7,7 @@ class Crypt:
 
     Use `cryptography.fernet.Fernet.generate_key()` method to generate the secret.
     """
+
     def __init__(self, secret):
         self._secret = secret
         self._algorithm = Fernet(secret)

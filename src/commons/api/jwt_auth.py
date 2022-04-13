@@ -5,7 +5,6 @@ from commons.api import auth
 
 
 class JwtAuthenticationClient(auth.BaseAuthenticationClient):
-
     def _authenticate_token(self, token):  # noqa
         """
         Authenticate user using the provided token.
@@ -21,10 +20,10 @@ class JwtAuthenticationClient(auth.BaseAuthenticationClient):
         returns the authenticated user if valid.
         """
         try:
-            scheme, token = get_authorization_header(request).decode('utf-8').split()
+            scheme, token = get_authorization_header(request).decode("utf-8").split()
 
             if scheme.lower() != self.scheme.lower():
-                raise ValueError('Invalid scheme.')
+                raise ValueError("Invalid scheme.")
 
         except (TypeError, ValueError):
             # deny token is not in a valid format.
@@ -35,7 +34,7 @@ class JwtAuthenticationClient(auth.BaseAuthenticationClient):
             return None
 
         # build authenticated user object.
-        user = auth.AuthenticatedUser(pk=claims.get('id'), role=claims.get('role'))
+        user = auth.AuthenticatedUser(pk=claims.get("id"), role=claims.get("role"))
 
         # returns the authenticated user.
         return user, token
