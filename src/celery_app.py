@@ -3,10 +3,10 @@ import os
 import celery
 
 # set the default Django settings module for the 'celery' program.
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "settings.development")
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "settings.production")
 
 
-app = celery.Celery("base")
+app = celery.Celery("base", include=["apps.worker.tasks"])
 
 
 # Using a string here means the worker doesn't have to serialize

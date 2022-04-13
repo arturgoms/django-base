@@ -21,7 +21,7 @@ from django.utils.translation import gettext_lazy as _
 # to control the entire project version.
 from rest_framework.reverse import reverse_lazy
 
-VERSION = "1.0.1"
+VERSION = "1.0.2"
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -63,6 +63,7 @@ INSTALLED_APPS = [
     "apps.domain",
     "apps.admin",
     "apps.api",
+    "apps.worker",
 ]
 
 MIDDLEWARE = [
@@ -372,3 +373,26 @@ NOTIFICATION_BACKEND = (
     "apps.websocket.notification.backend.console.WSNotificationBackend"
 )
 NOTIFICATIONS = {}
+
+# Celery Settings
+# http://docs.celeryproject.org/en/5.0/configuration.html
+
+CELERY_TIMEZONE = TIME_ZONE
+
+CELERY_TASK_DEFAULT_QUEUE = "base"
+
+CELERY_TASK_SERIALIZER = "json"
+CELERY_RESULT_SERIALIZER = "json"
+CELERY_ACCEPT_CONTENT = ["application/json"]
+
+CELERY_RESULT_BACKEND = None
+CELERY_TASK_SOFT_TIME_LIMIT = 30
+
+CELERY_BROKER_URL = config("CELERY_BROKER_URL", default="redis://:@localhost:6379/0")
+
+CELERY_BEAT_SCHEDULE = {
+    "example_task": {
+        "task": "example_task",
+        "schedule": celery.schedules.crontab(minute="*"),
+    }
+}

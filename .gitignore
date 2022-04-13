@@ -45,3 +45,4 @@ firebase-private-key.json
 
 # Project stuff:
 apps/pxadmin/static/admin/css/styles.min.css
+src/.DS_Store
