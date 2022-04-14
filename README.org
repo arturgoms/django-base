@@ -1,6 +1,6 @@
 #+TITLE: Django base
 
-#+html: <p align="center"><img src="https://github.com/arturgoms/django-base/actions/workflows/build.yml/badge.svg" /><img src="https://github.com/arturgoms/django-base/actions/workflows/tests.yml/badge.svg" />><img src="https://github.com/arturgoms/django-base/actions/workflows/lint.yml/badge.svg" /><img src="https://github.com/arturgoms/django-base/actions/workflows/format.yml/badge.svg" /></p>
+#+html: <p align="center"><img src="https://github.com/arturgoms/django-base/actions/workflows/build.yml/badge.svg" /><img src="https://github.com/arturgoms/django-base/actions/workflows/tests.yml/badge.svg" /><img src="https://github.com/arturgoms/django-base/actions/workflows/lint.yml/badge.svg" /><img src="https://github.com/arturgoms/django-base/actions/workflows/format.yml/badge.svg" /></p>
 
 * The Project
 
