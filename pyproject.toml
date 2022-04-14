@@ -26,6 +26,7 @@ django-silk = "^4.3.0"
 celery = "^5.2.6"
 django-ckeditor = "^6.3.2"
 Pillow = "^9.1.0"
+whitenoise = "^6.0.0"
 
 [tool.poetry.dev-dependencies]
 Faker = "8.10.3"
