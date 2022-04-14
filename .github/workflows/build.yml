@@ -1,4 +1,4 @@
-name: Build Docker Container & Push to Registry
+name: build
 
 on:
   workflow_call:

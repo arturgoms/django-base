@@ -1,4 +1,4 @@
-name: Django CI & Postgres Test
+name: test
 
 on:
   workflow_call:
