@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: django-base
-        image: ghcr.io/arturgoms/django-base:1.0.2
+        image: ghcr.io/arturgoms/django-base:1.0.5
         imagePullPolicy: Always
         envFrom:
           - configMapRef:
@@ -30,7 +30,7 @@ spec:
                 name: app-config
                 key: DATABASE_URL
         ports:
-          - containerPort: 8000
+          - containerPort: 80
             name: gunicorn
       imagePullSecrets:
         - name: dockerconfigjson-github-com
@@ -46,6 +46,6 @@ spec:
     app: django-base
   ports:
     - protocol: TCP
-      port: 8000
-      targetPort: 8000
+      port: 80
+      targetPort: 80
       nodePort: 31000

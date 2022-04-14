@@ -3,6 +3,7 @@ set -e
 
 # define settings module
 export DJANGO_SETTINGS_MODULE=settings.production
+export DJANGO_DEBUG=False
 
 if [ "$STARTUP" == "APP" ]
 then
