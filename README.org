@@ -76,3 +76,9 @@ Now you need to use the nginx port to access it:
 And Silk will not exist anymore because you are using a 'production like' environment.
 ** Production
 In production you will need to apply the configs for kubernets.
+
+* TODO
+Next steps:
+
+*** TODO Create workflow for rollout the kubernets images
+*** TODO Create kubernets files for: Celery, Worker and Flower Dashboard
